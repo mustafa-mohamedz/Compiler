@@ -16,6 +16,7 @@ public:
 
 class Production {
 public:
+    int priority;
     Symbol LHS;
     std::vector<Symbol> RHS;
 };
@@ -35,7 +36,7 @@ public:
     std::vector<Production> regularExpression; //list contains all the productions in the grammar in the same format as regular expression
 
     //constructor
-    RegularGrammar(std::string rulesPath);
+    explicit RegularGrammar(std::string rulesPath);
 
 };
 
