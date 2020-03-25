@@ -62,7 +62,9 @@ private:
     vector<Symbol> processSpecial(const string &, int &);
 
     vector<Symbol> substituteRange(const string &, int &);
-
+    set<Symbol> terminals; //set contains all terminals in the grammar
+    set<Symbol> nonTerminals; //set contains all non-terminals in the grammar
+    std::map<Symbol, std::vector<Symbol>> regularDefinition;
 public:
     /*
     * Important Notes
@@ -72,11 +74,9 @@ public:
     * 4- remove the regular definitions and convert the Keywords and the punctuations to the same format as regular expression
     * 5- epsilon is symbol with type special and value = "L"
     */
-    set<Symbol> terminals; //set contains all terminals in the grammar
-    set<Symbol> nonTerminals; //set contains all non-terminals in the grammar
     //The productions don't contain any non-terminals in RHS, substitute them by their RHS in Round brackets i.e. "(RHS)"
     std::vector<Production> regularExpression; //list contains all the productions in the grammar in the same format as regular expression
-    std::map<Symbol, std::vector<Symbol>> regularDefinition;
+
 
     //constructor
     RegularGrammar(const std::string &rulesPath);
