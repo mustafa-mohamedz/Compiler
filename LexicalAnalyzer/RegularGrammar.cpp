@@ -60,6 +60,7 @@ RegularGrammar::RegularGrammar(const std::string &rulesPath) {
         }
         myfile.close();
     }
+    clearSpecialSymbolsFromTerminals();
 }
 
 void RegularGrammar::processKeywords(string &line) {
@@ -200,4 +201,12 @@ vector<Symbol> RegularGrammar::processRHS(string &rightSide) {
     vector<Symbol> symbols = processNonSpecial(rightSide.substr(symbolStart));
     copy(symbols.begin(), symbols.end(), back_inserter(rhs));
     return rhs;
+}
+
+void RegularGrammar::clearSpecialSymbolsFromTerminals() {
+    for(auto f : terminals) {
+        if(f.type == terminal){
+            terminals.erase(f);
+        }
+    }
 }
