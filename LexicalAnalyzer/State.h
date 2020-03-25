@@ -14,7 +14,7 @@ class State {
     enum Type {
         start, accept, internal
     }type;
-    int num;
+    int id;
     std::map<char, std::vector<State>> transitions;
     void updateBy(int n, std::vector<char> alphabet);
     State(Type type, int n, std::map<char, std::vector<State>> t);

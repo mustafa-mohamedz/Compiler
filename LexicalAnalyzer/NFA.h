@@ -7,11 +7,11 @@
 
 
 class NFA {
-
 public:
     State start_state;
     State accept_state;
     std::vector<State> states;
+    void printNFA(std::vector<char> alphabet);
     NFA(RegularGrammar regularGrammar);
 // Driver code
 
