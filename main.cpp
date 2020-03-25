@@ -19,71 +19,24 @@ int main() {
     NFA n3 = builder.oring(initial_nfa[0], initial_nfa[1], alphabet);
 
     std::cout << "Result of a or b" << std::endl;
-    for (int i = 0; i < n3.states.size(); ++i) {
-        State s = n3.states[i];
-        std::cout << "State " << s.num << std::endl;
-        for (int j = 0; j < alphabet.size(); ++j) {
-            std::vector<State> next = s.transitions[alphabet[j]];
-            for (int k = 0; k < next.size(); ++k) {
-                std::cout << "#i/p: " << alphabet[j] << std::endl << s.num << "-->" << next[k].num << std::endl;
-            }
-        }
+    n3.printNFA(alphabet);
 
-    }
+    NFA n4 = builder.concatinate(n3, initial_nfa[1], alphabet);
+    n4.printNFA(alphabet);
 
 
 
 
-
-
-
-    for (int j = 0; j < initial_nfa.size(); ++j) {
-        nfa = initial_nfa[j];
-        std::cout << "NFA for Symbol " << alphabet[j] << std::endl;
-        State start_state = nfa.start_state;
-        State accept_state = nfa.accept_state;
-
-        for (int i = 0; i < nfa.states.size(); ++i) {
-            State s = nfa.states[i];
-            std::vector<State> next = s.transitions[alphabet[j]];
-            for (int k = 0; k < next.size(); ++k) {
-                std::cout << "#i/p: " << alphabet[j] << std::endl << s.num << "-->" << next[k].num << std::endl;
-
-            }
-        }
-    }
 
     NFA n = builder.concatinate(initial_nfa[0], initial_nfa[1], alphabet);
+    n.printNFA(alphabet);
 
-    std::cout << "Result of ab" << std::endl;
-    for (int i = 0; i < n.states.size(); ++i) {
-        State s = n.states[i];
-        std::cout << "State " << s.num << std::endl;
-        for (int j = 0; j < alphabet.size(); ++j) {
-            std::vector<State> next = s.transitions[alphabet[j]];
-            for (int k = 0; k < next.size(); ++k) {
-                std::cout << "#i/p: " << alphabet[j] << std::endl << s.num << "-->" << next[k].num << std::endl;
-            }
-        }
-    }
+    NFA n2 = builder.concatinate(n, initial_nfa[2], alphabet);
+    n2.printNFA(alphabet);
 
- /*   NFA n2 = builder.concatinate(n, initial_nfa[2], alphabet);
-
-    std::cout << "Result of abc" << std::endl;
-    for (int i = 0; i < n2.states.size(); ++i) {
-        State s = n2.states[i];
-        std::cout << "State " << s.num << std::endl;
-        for (int j = 0; j < alphabet.size(); ++j) {
-            std::vector<State> next = s.transitions[alphabet[j]];
-            for (int k = 0; k < next.size(); ++k) {
-                std::cout << "#i/p: " << alphabet[j] << std::endl << s.num << "-->" << next[k].num << std::endl;
-            }
-        }
-
-    }
-*/
-
-
+    NFA n5 = builder.closure(n3, alphabet);
+    std::cout << "Result of (a|b)*" << std::endl;
+    n5.printNFA(alphabet);
 
 
     return 0;
