@@ -7,8 +7,13 @@
 #include <set>
 #include <iostream>
 #include <fstream>
-
+#include <algorithm>
+#include <regex>
 using namespace std;
+
+
+
+
 enum Type {
     terminal, nonTerminal, special
 };
@@ -82,6 +87,34 @@ public:
     RegularGrammar(const std::string &rulesPath);
 
 };
+static inline void ltrim(std::string &s) {
+    s.erase(s.begin(), std::find_if(s.begin(), s.end(), [](int ch) {
+        return !std::isspace(ch);
+    }));
+}
+
+// trim from end (in place)
+static inline void rtrim(std::string &s) {
+    s.erase(std::find_if(s.rbegin(), s.rend(), [](int ch) {
+        return !std::isspace(ch);
+    }).base(), s.end());
+}
+
+// trim from both ends (in place)
+static inline void trim(std::string &s) {
+    ltrim(s);
+    rtrim(s);
+}
+
+static vector<string> splitWithRegexDelimiter(const string &str, const string &delim) {
+    vector<string> tokens;
+    regex words_regex(delim);
+    auto words_begin = std::sregex_iterator(str.begin(), str.end(), words_regex);
+    auto words_end = std::sregex_iterator();
+    for (std::sregex_iterator i = words_begin; i != words_end; ++i)
+        tokens.push_back((*i).str());
+    return tokens;
+}
 
 
 #endif //COMPILER_REGULARGRAMMAR_H

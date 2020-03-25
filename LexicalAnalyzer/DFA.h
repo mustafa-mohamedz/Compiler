@@ -5,6 +5,11 @@
 
 class DFA {
 public:
+    DFA();
+
+    State start_state;
+    std::vector<State> accept_states;
+    std::vector<State> states;
     //constructor
     DFA(NFA nonDeterministicAutomata);
 };

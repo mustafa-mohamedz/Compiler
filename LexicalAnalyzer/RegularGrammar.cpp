@@ -1,36 +1,5 @@
-#include <algorithm>
-#include <regex>
 #include "RegularGrammar.h"
 
-
-static inline void ltrim(std::string &s) {
-    s.erase(s.begin(), std::find_if(s.begin(), s.end(), [](int ch) {
-        return !std::isspace(ch);
-    }));
-}
-
-// trim from end (in place)
-static inline void rtrim(std::string &s) {
-    s.erase(std::find_if(s.rbegin(), s.rend(), [](int ch) {
-        return !std::isspace(ch);
-    }).base(), s.end());
-}
-
-// trim from both ends (in place)
-static inline void trim(std::string &s) {
-    ltrim(s);
-    rtrim(s);
-}
-
-vector<string> split(const string &str, const string &delim) {
-    vector<string> tokens;
-    regex words_regex(delim);
-    auto words_begin = std::sregex_iterator(str.begin(), str.end(), words_regex);
-    auto words_end = std::sregex_iterator();
-    for (std::sregex_iterator i = words_begin; i != words_end; ++i)
-        tokens.push_back((*i).str());
-    return tokens;
-}
 
 bool isDelimiter(char x) {
     return x == '+' || x == '-' || x == '\\' || x == '*' || x == '|' || x == '(' || x == ')' || x == ' ' || x == '\t';
@@ -60,13 +29,12 @@ RegularGrammar::RegularGrammar(const std::string &rulesPath) {
         }
         myfile.close();
     }
-    clearSpecialSymbolsFromTerminals();
 }
 
 void RegularGrammar::processKeywords(string &line) {
     line = line.substr(1, line.find_last_of("}") - 1);
     trim(line);
-    vector<string> tokens = split(line, "[^\\s]+");
+    vector<string> tokens = splitWithRegexDelimiter(line, "[^\\s]+");
     for (vector<string>::size_type i = 0; i != tokens.size(); i++) {
         Symbol lhs(nonTerminal, tokens[i]);
         vector<Symbol> rhs;
@@ -83,7 +51,7 @@ void RegularGrammar::processKeywords(string &line) {
 
 void RegularGrammar::processPunctuation(string &line) {
     line = line.substr(1, line.find_last_of("]") - 1);
-    vector<string> tokens = split(line, "[^\\s]+");
+    vector<string> tokens = splitWithRegexDelimiter(line, "[^\\s]+");
     for (vector<string>::size_type i = 0; i != tokens.size(); i++) {
         string leftSide;
         vector<Symbol> rhs;
@@ -115,6 +83,7 @@ vector<Symbol> RegularGrammar::processNonSpecial(const string &str) {
         for (int i = 0; i < str.size(); ++i) {
             Symbol currentSymbol(terminal, str.substr(i, 1));
             ans.push_back(currentSymbol);
+            terminals.insert(currentSymbol);
         }
     }
     return ans;
@@ -135,7 +104,8 @@ vector<Symbol> RegularGrammar::processSpecial(const string &str, int &index) {
         if (str[index + 1] == 'L') {
             result.push_back(Symbol(special, "L"));
         } else {
-            result.push_back(Symbol(terminal, string(1, str[index + 1])));
+            Symbol currentSymbol(terminal, string(1, str[index + 1]));
+            result.push_back(currentSymbol);
         }
         index++;
     }
@@ -155,8 +125,9 @@ vector<Symbol> RegularGrammar::substituteRange(const string &str, int &index) {
     end = str[endIndex];
     for (; start < end; ++start) {
         result.push_back(Symbol(special, "|"));
-
-        result.push_back(Symbol(terminal, string(1, start)));
+        Symbol currentSymbol(terminal, string(1, start));
+        result.push_back(currentSymbol);
+        terminals.insert(currentSymbol);
     }
     result.push_back(Symbol(special, "|"));
     return result;
@@ -169,7 +140,7 @@ void RegularGrammar::processRegularDefinition(string &line) {
     nonTerminals.insert(lhs);
     string rightSide = line.substr(line.find_first_of("=") + 1);
     vector<Symbol> rhs = processRHS(rightSide);
-    copy(rhs.begin(), rhs.end(), std::inserter(terminals, terminals.end()));
+//    copy(rhs.begin(), rhs.end(), std::inserter(terminals, terminals.end()));
     regularDefinition.insert(pair<Symbol, vector<Symbol>>(lhs, rhs));
 }
 
@@ -180,7 +151,7 @@ void RegularGrammar::processExpression(string &line, int priority) {
     nonTerminals.insert(lhs);
     string rightSide = line.substr(line.find_first_of(":") + 1);
     vector<Symbol> rhs = processRHS(rightSide);
-    copy(rhs.begin(), rhs.end(), std::inserter(terminals, terminals.end()));
+//    copy(rhs.begin(), rhs.end(), std::inserter(terminals, terminals.end()));
     regularExpression.push_back(Production(lhs, rhs, priority));
 }
 
@@ -203,10 +174,10 @@ vector<Symbol> RegularGrammar::processRHS(string &rightSide) {
     return rhs;
 }
 
-void RegularGrammar::clearSpecialSymbolsFromTerminals() {
-    for(auto f : terminals) {
-        if(f.type == terminal){
-            terminals.erase(f);
-        }
-    }
-}
+//void RegularGrammar::clearSpecialSymbolsFromTerminals() {
+//    for(auto f : terminals) {
+//        if(f.type == special){
+//            terminals.erase(f);
+//        }
+//    }
+//}
