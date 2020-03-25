@@ -12,6 +12,7 @@ int main() {
     DFA dfa(nfa);
     ProgramReader pr("",dfa);
 
+
     std::vector<char> alphabet = {'a', 'b', 'c', 'd', 'L'};
     NFABuilder builder;
     std::vector<NFA> initial_nfa = builder.basicConstruct(alphabet);
