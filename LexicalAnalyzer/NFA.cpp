@@ -1,5 +1,6 @@
 #include "NFA.h"
 
-NFA::NFA(RegularGrammar regularGrammar){
+NFA::NFA(RegularGrammar regularGrammar) {
 
 }
+
