@@ -1,7 +1,6 @@
 #include "RegularGrammar.h"
 
 
-
 bool isDelimiter(char x) {
     return x == '+' || x == '-' || x == '\\' || x == '*' || x == '|' || x == '(' || x == ')' || x == ' ' || x == '\t';
 }

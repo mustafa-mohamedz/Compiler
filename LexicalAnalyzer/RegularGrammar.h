@@ -9,8 +9,11 @@
 #include <fstream>
 #include <algorithm>
 #include <regex>
-
 using namespace std;
+
+
+
+
 enum Type {
     terminal, nonTerminal, special
 };
@@ -103,7 +106,7 @@ static inline void trim(std::string &s) {
     rtrim(s);
 }
 
-vector<string> splitWithRegexDelimiter(const string &str, const string &delim) {
+static vector<string> splitWithRegexDelimiter(const string &str, const string &delim) {
     vector<string> tokens;
     regex words_regex(delim);
     auto words_begin = std::sregex_iterator(str.begin(), str.end(), words_regex);
@@ -112,5 +115,6 @@ vector<string> splitWithRegexDelimiter(const string &str, const string &delim) {
         tokens.push_back((*i).str());
     return tokens;
 }
+
 
 #endif //COMPILER_REGULARGRAMMAR_H
