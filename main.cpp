@@ -2,6 +2,7 @@
 #include <NFABuilder.h>
 #include <winsock.h>
 #include <State.h>
+#include <InputParser.h>
 #include "LexicalAnalyzer/ProgramReader.h"
 
 int main() {
@@ -15,29 +16,19 @@ int main() {
     NFABuilder builder;
     std::vector<NFA> initial_nfa = builder.basicConstruct(alphabet);
 
+    string input = "ab|c";
 
-    NFA n3 = builder.oring(initial_nfa[0], initial_nfa[1], alphabet);
+    InputParser parser(input, alphabet, initial_nfa, builder);
 
-    std::cout << "Result of a or b" << std::endl;
-    n3.printNFA(alphabet);
+    NFA result = parser.get_NFA_of();
 
-    NFA n4 = builder.concatinate(n3, initial_nfa[1], alphabet);
-    n4.printNFA(alphabet);
-
+    result.printNFA(alphabet);
 
 
 
 
-    NFA n = builder.concatinate(initial_nfa[0], initial_nfa[1], alphabet);
-    n.printNFA(alphabet);
-
-    NFA n2 = builder.concatinate(n, initial_nfa[2], alphabet);
-    n2.printNFA(alphabet);
-
-    NFA n5 = builder.closure(n3, alphabet);
-    std::cout << "Result of (a|b)*" << std::endl;
-    n5.printNFA(alphabet);
 
 
     return 0;
 }
+
