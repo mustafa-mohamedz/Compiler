@@ -1,7 +1,7 @@
 #include <iostream>
-#include <NFABuilder.h>
+#include "LexicalAnalyzer/NFABuilder.h"
 #include <winsock.h>
-#include <State.h>
+#include "LexicalAnalyzer/State.h"
 #include "LexicalAnalyzer/ProgramReader.h"
 
 int main() {

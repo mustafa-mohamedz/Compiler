@@ -36,7 +36,7 @@
 # IDE (Clion)
 /cmake-build-debug/
 /.idea/
-CMakeLists.txt
+
 
 # IDE (eclipse)
 

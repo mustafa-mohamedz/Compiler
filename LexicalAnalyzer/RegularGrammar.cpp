@@ -1,36 +1,6 @@
-#include <algorithm>
-#include <regex>
 #include "RegularGrammar.h"
 
 
-static inline void ltrim(std::string &s) {
-    s.erase(s.begin(), std::find_if(s.begin(), s.end(), [](int ch) {
-        return !std::isspace(ch);
-    }));
-}
-
-// trim from end (in place)
-static inline void rtrim(std::string &s) {
-    s.erase(std::find_if(s.rbegin(), s.rend(), [](int ch) {
-        return !std::isspace(ch);
-    }).base(), s.end());
-}
-
-// trim from both ends (in place)
-static inline void trim(std::string &s) {
-    ltrim(s);
-    rtrim(s);
-}
-
-vector<string> split(const string &str, const string &delim) {
-    vector<string> tokens;
-    regex words_regex(delim);
-    auto words_begin = std::sregex_iterator(str.begin(), str.end(), words_regex);
-    auto words_end = std::sregex_iterator();
-    for (std::sregex_iterator i = words_begin; i != words_end; ++i)
-        tokens.push_back((*i).str());
-    return tokens;
-}
 
 bool isDelimiter(char x) {
     return x == '+' || x == '-' || x == '\\' || x == '*' || x == '|' || x == '(' || x == ')' || x == ' ' || x == '\t';
@@ -66,7 +36,7 @@ RegularGrammar::RegularGrammar(const std::string &rulesPath) {
 void RegularGrammar::processKeywords(string &line) {
     line = line.substr(1, line.find_last_of("}") - 1);
     trim(line);
-    vector<string> tokens = split(line, "[^\\s]+");
+    vector<string> tokens = splitWithRegexDelimiter(line, "[^\\s]+");
     for (vector<string>::size_type i = 0; i != tokens.size(); i++) {
         Symbol lhs(nonTerminal, tokens[i]);
         vector<Symbol> rhs;
@@ -83,7 +53,7 @@ void RegularGrammar::processKeywords(string &line) {
 
 void RegularGrammar::processPunctuation(string &line) {
     line = line.substr(1, line.find_last_of("]") - 1);
-    vector<string> tokens = split(line, "[^\\s]+");
+    vector<string> tokens = splitWithRegexDelimiter(line, "[^\\s]+");
     for (vector<string>::size_type i = 0; i != tokens.size(); i++) {
         string leftSide;
         vector<Symbol> rhs;
