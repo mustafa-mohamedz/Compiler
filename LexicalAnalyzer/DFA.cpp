@@ -3,3 +3,7 @@
 DFA::DFA(NFA nonDeterministicAutomata) {
 
 }
+
+DFA::DFA() {
+
+}
