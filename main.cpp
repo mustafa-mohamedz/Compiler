@@ -17,7 +17,7 @@ int main() {
     NFABuilder builder;
     std::vector<NFA> initial_nfa = builder.basicConstruct(alphabet);
 
-    string input = "a|bc*";
+    string input = "a|b";
 
     InputParser parser(input, alphabet, initial_nfa, builder);
 
