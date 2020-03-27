@@ -75,7 +75,7 @@ vector<Symbol> RegularGrammar::processNonSpecial(const string &str) {
     Symbol temp(nonTerminal, str);
     vector<Symbol> ans;
     if (nonTerminals.find(temp) != nonTerminals.end()) {
-        vector<Symbol> nonTerminalValue = (*regularDefinition.find(temp)).second;
+        vector<Symbol> nonTerminalValue = regularDefinition.find(temp)->second;
         ans.push_back(Symbol(special, "("));
         copy(nonTerminalValue.begin(), nonTerminalValue.end(), back_inserter(ans));
         ans.push_back(Symbol(special, ")"));
@@ -102,7 +102,10 @@ vector<Symbol> RegularGrammar::processSpecial(const string &str, int &index) {
         result = substituteRange(str, index);
     } else if (str[index] == '\\') {
         if (str[index + 1] == 'L') {
-            result.push_back(Symbol(special, "L"));
+            Symbol epsilon(special, "L");
+            result.push_back(epsilon);
+            terminals.insert(epsilon);
+
         } else {
             Symbol currentSymbol(terminal, string(1, str[index + 1]));
             result.push_back(currentSymbol);
