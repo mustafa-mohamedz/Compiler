@@ -8,16 +8,20 @@
 
 #include <map>
 #include <vector>
+#include <string>
+#include "RegularGrammar.h"
 
+using namespace std;
 class State {
     public:
     enum Type {
         start, accept, internal
     }type;
     int id;
-    std::map<char, std::vector<State>> transitions;
-    void updateBy(int n, std::vector<char> alphabet);
-    State(Type type, int n, std::map<char, std::vector<State>> t);
+    Production accepted_production;
+    map<Symbol, std::vector<State>> transitions;
+    void updateBy(int n, set<Symbol> alphabet);
+    State(Type type, int n, map<Symbol, std::vector<State>> t);
     State(){};
 };
 

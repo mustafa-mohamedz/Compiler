@@ -48,6 +48,7 @@ public:
     Symbol LHS;
     std::vector<Symbol> RHS;
     int priority;
+    Production(){};
 };
 
 class RegularGrammar {
@@ -85,6 +86,7 @@ public:
     set<Symbol> terminals; //set contains all terminals in the grammar
     //constructor
     RegularGrammar(const std::string &rulesPath);
+    RegularGrammar();
 
 };
 static inline void ltrim(std::string &s) {

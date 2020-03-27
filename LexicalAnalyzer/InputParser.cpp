@@ -4,44 +4,34 @@
 
 #include "InputParser.h"
 
-InputParser::InputParser(string input, vector<char> alphabet, vector<NFA> initial_nfa, NFABuilder builder) {
+InputParser::InputParser(RegularGrammar input) {
     this->input = input;
-    this->alphabet = alphabet;
-    this->initial_nfa = initial_nfa;
-    this->builder = builder;
+    builder = NFABuilder(input.terminals);
+    initial_nfa = builder.basicConstruct();
+
+
 }
 
-NFA InputParser::get_NFA_of() {
-    RegularGrammar rg("");
-    NFA result_nfa(rg);
-    result_nfa = findNFA(input[0]);
+NFA InputParser::get_NFA() {
+
+    NFA result_nfa;
+    Symbol s();
     int counter = 1;
-    while(counter < input.size()){
-        char current_symbol = input[counter];
-        switch(input[counter]){
-            case '|':
-                result_nfa = builder.oring(result_nfa, findNFA(input[counter + 1]), alphabet);
-                counter++;
-                break;
-            case '*':
-                result_nfa = builder.closure(result_nfa, alphabet);
-                break;
-            default:
-                result_nfa = builder.concatinate(result_nfa, findNFA(input[counter]), alphabet);
-        }
-        counter++;
-    }
+
     return result_nfa;
 }
 
-NFA InputParser::findNFA(char c){
-    RegularGrammar rg("..//input sample 1.txt");
-    NFA result_nfa(rg);
-    for (int i = 0; i < alphabet.size(); ++i) {
-        if(c == alphabet[i]){
+NFA InputParser::getNFA_of(Symbol c){
+    //TODO
+    NFA result_nfa;
+    /*int i = 0;
+    for (auto elem : alphabet) {
+        if(c.value == elem.value && c.type == elem.type){
             result_nfa = initial_nfa[i];
             break;
         }
+        i++;
     }
+     */
     return result_nfa;
 }
