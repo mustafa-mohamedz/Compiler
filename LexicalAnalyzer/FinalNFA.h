@@ -1,0 +1,16 @@
+#ifndef COMPILER_FINALNFA_H
+#define COMPILER_FINALNFA_H
+
+#include "NFA.h"
+
+class FinalNFA {
+public:
+    State start_state;
+    std::vector<State> accept_state_list;
+    std::vector<State> internal_state_list;
+    FinalNFA(std::vector<NFA>, set<Symbol> alphabet);
+
+};
+
+
+#endif //COMPILER_FINALNFA_H
