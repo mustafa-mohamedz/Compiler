@@ -1,3 +1,4 @@
+x : (a | b c ) * d *|/L
 letter = a-z | A-Z
 digit = 0 - 9
 id: letter (letter|digit)*

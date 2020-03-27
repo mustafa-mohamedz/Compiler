@@ -68,9 +68,13 @@ private:
 
     vector<Symbol> substituteRange(const string &, int &);
     void clearSpecialSymbolsFromTerminals();
+    bool isConcatenationRHS(const Symbol &x);
+
+    bool isConcatenationLHS(const Symbol &x);
 
     set<Symbol> nonTerminals; //set contains all non-terminals in the grammar
     std::map<Symbol, std::vector<Symbol>> regularDefinition;
+
 public:
     /*
     * Important Notes
@@ -85,6 +89,10 @@ public:
     set<Symbol> terminals; //set contains all terminals in the grammar
     //constructor
     RegularGrammar(const std::string &rulesPath);
+
+    void specifyConcatenation();
+
+
 
 };
 static inline void ltrim(std::string &s) {

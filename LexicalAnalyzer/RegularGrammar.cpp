@@ -8,9 +8,9 @@ bool isDelimiter(char x) {
 RegularGrammar::RegularGrammar(const std::string &rulesPath) {
     std::string line;
     int priorityCounter = 1;
-    std::ifstream myfile(rulesPath);
-    if (myfile.is_open()) {
-        while (getline(myfile, line)) {
+    std::ifstream rulesFile(rulesPath);
+    if (rulesFile.is_open()) {
+        while (getline(rulesFile, line)) {
             trim(line);
             if (line[0] == '{') {
                 processKeywords(line);
@@ -27,7 +27,8 @@ RegularGrammar::RegularGrammar(const std::string &rulesPath) {
                 std::cout << "error in rules file";
             }
         }
-        myfile.close();
+        specifyConcatenation();
+        rulesFile.close();
     }
 }
 
@@ -177,6 +178,26 @@ vector<Symbol> RegularGrammar::processRHS(string &rightSide) {
     return rhs;
 }
 
+void RegularGrammar::specifyConcatenation() {
+    for(int i = 0; i < regularExpression.size(); ++i){
+        vector <Symbol> expression = regularExpression[i].RHS;
+        for (int j = 1; j < expression.size(); ++j) {
+            if(isConcatenationLHS(expression[j - 1]) && isConcatenationRHS(expression[j])){
+                expression.insert(expression.begin() + j, Symbol(special, "."));
+            }
+        }
+        regularExpression[i].RHS = expression;
+    }
+}
+
+
+
+bool RegularGrammar::isConcatenationLHS(const Symbol& x){
+    return (x.type == special && (x.value == "*" || x.value == "+"|| x.value == ")" || x.value == "L"))||x.type == terminal;
+}
+bool RegularGrammar::isConcatenationRHS(const Symbol& x){
+    return (x.type == special && (x.value == "(" || x.value == "L"))||x.type == terminal;
+}
 //void RegularGrammar::clearSpecialSymbolsFromTerminals() {
 //    for(auto f : terminals) {
 //        if(f.type == special){
