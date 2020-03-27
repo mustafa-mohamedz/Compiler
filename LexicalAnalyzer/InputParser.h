@@ -12,13 +12,16 @@
 class InputParser {
     private:
     RegularGrammar input;
-    vector<NFA> initial_nfa;
     NFABuilder builder;
+
+    int getPrecedence(Symbol s);
+    vector<Production> getPostfix();
     public:
+    vector<Production> postfix_productions;
     InputParser(RegularGrammar input);
     InputParser(){};
     NFA getNFA_of(Symbol c);
-    NFA get_NFA();
+    vector<NFA> get_NFA();
 
 
 };

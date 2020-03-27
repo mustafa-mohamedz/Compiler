@@ -12,10 +12,11 @@
 class NFABuilder {
     public:
     set<Symbol> alphabet;
-    std::vector<NFA> basicConstruct();
+    NFA basicConstruct(Symbol s);
     NFA concatinate(NFA n1, NFA n2);
     NFA oring(NFA n1, NFA n2);
-    NFA closure(NFA n);
+    NFA extended_closure(NFA nfa);
+    NFA closure(NFA nfa);
     NFABuilder(set<Symbol> alphabet);
     NFABuilder(){};
 

@@ -10,27 +10,23 @@ NFABuilder::NFABuilder(set<Symbol> alphabet){
     this->alphabet = alphabet;
 }
 //TODO Remove basicConstruct
-std::vector<NFA> NFABuilder::basicConstruct() {
-    std::vector<NFA> basic_nfa_list;
-    for (auto elem : alphabet) {
-        NFA temp;
-        std::vector<State> states;
-        //create the states
-        State start(State::start, 0, std::map<Symbol, std::vector<State>>());
-        State accept(State::accept, 1, std::map<Symbol, std::vector<State>>());
-        temp.start_state = start;
-        temp.accept_state = accept;
-        //update transitions
-        std::vector<State> next_states;
-        next_states.push_back(accept);
-        temp.start_state.transitions.insert({elem, next_states});
-        //State addition
-        states.push_back(temp.start_state);
-        states.push_back(temp.accept_state);
-        temp.states = states;
-        basic_nfa_list.push_back(temp);
-}
-    return basic_nfa_list;
+NFA NFABuilder::basicConstruct(Symbol s) {
+    NFA basic_nfa;
+    //create the states
+    vector<State> states;
+    State start(State::start, 0, map<Symbol, std::vector<State>>());
+    State accept(State::accept, 1, map<Symbol, std::vector<State>>());
+    basic_nfa.start_state = start;
+    basic_nfa.accept_state = accept;
+    //update transitions
+    std::vector<State> next_states;
+    next_states.push_back(accept);
+    basic_nfa.start_state.transitions.insert({s, next_states});
+    //State addition
+    states.push_back(basic_nfa.start_state);
+    states.push_back(basic_nfa.accept_state);
+    basic_nfa.states = states;
+    return basic_nfa;
 }
 NFA NFABuilder::concatinate(NFA n1, NFA n2) {
     NFA first_nfa = n1;
@@ -80,7 +76,7 @@ NFA NFABuilder::oring(NFA n1, NFA n2) {
     //Update states' numbers for first nfa
     first_nfa.start_state.updateBy(1, alphabet);
     first_nfa.accept_state.updateBy(1, alphabet);
-    //Update all internal states
+    //Update all states
     for (int i = 0; i < first_nfa.states.size(); ++i) {
         first_nfa.states[i].updateBy(1, alphabet);
         first_nfa.states[i].type = State::internal;
@@ -122,6 +118,7 @@ NFA NFABuilder::oring(NFA n1, NFA n2) {
     result_nfa.states.push_back(end_state);
     return result_nfa;
 }
+
 NFA NFABuilder::closure(NFA nfa) {
     NFA result_nfa;
     //Update states' numbers
@@ -139,7 +136,6 @@ NFA NFABuilder::closure(NFA nfa) {
     //Next states adjusting
     std::vector<State> next_states;
     next_states.push_back(nfa.start_state);
-    next_states.push_back(end_state);
     std::map<Symbol, std::vector<State>> start_transitions;
     start_transitions.insert({Symbol(special, "L"), next_states});
     State start_of_result(State::start, 0, start_transitions);
@@ -156,5 +152,15 @@ NFA NFABuilder::closure(NFA nfa) {
         result_nfa.states.push_back(nfa.states[i]);
     }
     result_nfa.states.push_back(end_state);
+    return result_nfa;
+}
+
+NFA NFABuilder::extended_closure(NFA nfa) {
+    NFA result_nfa = closure(nfa);
+    Symbol s(special, "L");
+    vector<State> next_states_of_start = result_nfa.states[0].transitions[s];
+    next_states_of_start.push_back(result_nfa.accept_state);
+    result_nfa.states[0].transitions[s].push_back(result_nfa.accept_state);
+    result_nfa.start_state.transitions[s].push_back(result_nfa.accept_state);
     return result_nfa;
 }

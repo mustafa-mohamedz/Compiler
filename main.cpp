@@ -89,9 +89,10 @@ int main() {
     std::cout << "starting!!" << std::endl;
     RegularGrammar rg("..//Compiler//input sample 1.txt");
     InputParser parser(rg);
-    NFA result = parser.get_NFA();
-    DFA dfa(result);
-    ProgramReader pr("",dfa);
+
+//    NFA result = parser.get_NFA();
+//    DFA dfa(result);
+//    ProgramReader pr("",dfa);
 
 
 //    string str = "((a)|(b))|(c)";
@@ -104,18 +105,30 @@ int main() {
 
 
     set<Symbol> symbols = {Symbol(terminal, "a"), Symbol(terminal, "b"), Symbol(special, "L")};
-    vector<Symbol> input = {Symbol(terminal, "a"), Symbol(special, "|"), Symbol(terminal, "b")};
+    /*vector<Symbol> input = {Symbol(special, "("), Symbol(terminal, "a"),Symbol(special, "*"),
+                            Symbol(special, "|"), Symbol(terminal, "b"),
+                            Symbol(special, ")"), Symbol(special, "|"),
+                            Symbol(terminal, "c"), Symbol(special, "*")};
+*/
+    vector<Symbol> input = {Symbol(terminal, "a"),Symbol(special, "+")};
+    RegularGrammar r;
+    Production p;
+    Symbol lhs (nonTerminal, "test");
+    p.LHS = lhs;
+    p.RHS = input;
 
-    NFABuilder builder;
-    builder.alphabet = symbols;
-    std::vector<NFA> initial_nfa = builder.basicConstruct();
+    r.regularExpression.push_back(p);
+    r.terminals = symbols;
+    InputParser parser1(r);
+    vector<Production> v1 = parser1.postfix_productions;
+
+    vector<NFA> result = parser1.get_NFA();
+
+    result[0].printNFA(symbols);
+
+    string str = "((a)|(b))|(c)";
 
 
-    InputParser parser(input, symbols, initial_nfa, builder);
-
-    NFA result = parser.get_NFA();
-
-    result.printNFA(symbols);
 
 
 

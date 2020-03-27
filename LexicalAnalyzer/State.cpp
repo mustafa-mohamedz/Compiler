@@ -14,7 +14,7 @@ void State::updateBy(int n, set<Symbol> alphabet) {
     for (auto elem : alphabet) {
         if(this->transitions.find(elem) != this->transitions.end()){
         for (int k = 0; k < this->transitions.find(elem)->second.size(); ++k) {
-                this->transitions.find(elem)->second[k].id += n;
+                 this->transitions.find(elem)->second[k].id += n;
             }
         }
     }
