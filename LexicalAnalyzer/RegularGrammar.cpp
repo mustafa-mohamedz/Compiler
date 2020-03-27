@@ -32,6 +32,10 @@ RegularGrammar::RegularGrammar(const std::string &rulesPath) {
     }
 }
 
+RegularGrammar::RegularGrammar() {
+
+}
+
 void RegularGrammar::processKeywords(string &line) {
     line = line.substr(1, line.find_last_of("}") - 1);
     trim(line);
