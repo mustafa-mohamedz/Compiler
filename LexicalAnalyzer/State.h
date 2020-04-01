@@ -20,6 +20,9 @@ class State {
     int id;
     Production accepted_production;
     map<Symbol, std::vector<State>> transitions;
+    bool operator<(const State &x) const {
+        return id < x.id;
+    }
     void updateBy(int n, set<Symbol> alphabet);
     State(Type type, int n, map<Symbol, std::vector<State>> t);
     State(){};

@@ -1,6 +1,7 @@
 #include "FinalNFA.h"
 
 FinalNFA::FinalNFA(std::vector<NFA> NFAList, set<Symbol> alphabet) {
+    this->alphabet = alphabet;
     //Update states' numbers for all NFAs
     int updateCounter = 1;
     for (vector<NFA>::size_type j = 0; j < NFAList.size(); j++) {

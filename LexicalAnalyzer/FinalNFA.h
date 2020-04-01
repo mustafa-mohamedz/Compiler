@@ -5,6 +5,7 @@
 
 class FinalNFA {
 public:
+    set<Symbol> alphabet;
     State start_state;
     std::vector<State> accept_state_list;
     std::vector<State> internal_state_list;
