@@ -19,12 +19,10 @@ public:
     std::vector<State> NFAStates;
     map<Symbol, std::vector<State>> transitions;
     map<Symbol, DFAState> DFATransitions;
-
+    Production accepted_production;
     bool operator<(const DFAState &x) const {
         return x.id > id;
     }
-
-    void updateBy(int n, set<Symbol> alphabet);
 
     DFAState(Type type, int n, map<Symbol, std::vector<State>> t);
 

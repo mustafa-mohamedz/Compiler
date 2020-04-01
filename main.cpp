@@ -14,9 +14,10 @@ int main() {
     RegularGrammar rg("..//input sample 1.txt");
     rg.terminals.insert(Symbol(special, "L"));
     InputParser parser(rg);
-    FinalNFA finalNfa(parser.get_NFA(), rg.terminals);
+    vector<NFA> temp = parser.get_NFA();
+    FinalNFA finalNfa(temp, rg.terminals);
     DFABuilder dfaBuilder;
-    dfaBuilder.basicConstruct(finalNfa);
+    DFA dfa = dfaBuilder.basicConstruct(temp[0]);
     return 0;
 }
 

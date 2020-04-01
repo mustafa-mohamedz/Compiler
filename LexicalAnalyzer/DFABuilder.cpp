@@ -5,15 +5,15 @@
 #include "DFABuilder.h"
 
 using namespace std;
+NFA global_nfa;
 
-DFA DFABuilder::basicConstruct(FinalNFA nonDeterministicAutomata) {
+DFA DFABuilder::basicConstruct(NFA nonDeterministicAutomata) {
+    global_nfa = nonDeterministicAutomata;
     DFA dfa;
     State s0 = nonDeterministicAutomata.start_state;
     set<DFAState> set;
     queue<DFAState> queue;
     DFAState closure = merge_states(LClosure(s0));
-    dfa.start_state = closure;
-    dfa.states.push_back(closure);
     set.insert(closure);
     queue.push(closure);
     while (!queue.empty()) {
@@ -21,34 +21,56 @@ DFA DFABuilder::basicConstruct(FinalNFA nonDeterministicAutomata) {
         queue.pop();
         auto it = t.transitions.begin();
         while (it != t.transitions.end()) {
-            DFAState u = merge_states(LClosureVec((it->second)));
+            std::vector<State> l_closure_vec = LClosureVec((it->second));
+            DFAState u = merge_states(l_closure_vec);
             if (set.find(u) == set.end()) {
                 set.insert(u);
                 queue.push(u);
-                dfa.states.push_back(u);
             }
-            t.DFATransitions.insert(pair<Symbol, DFAState>(it->first, u));
+            if (u.NFAStates.size() != 0) t.DFATransitions.insert(pair<Symbol, DFAState>(it->first, u));
             it++;
+        }
+        dfa.states.push_back(t);
+    }
+    for (int i = 0; i < dfa.states.size(); i++) {
+        if (dfa.states[i].type == DFAState::start) {
+            dfa.start_state = dfa.states[i];
+        } else if (dfa.states[i].type == DFAState::accept) {
+            int min = INT_MAX;
+            Production min_production;
+            for (int j = 0; j < dfa.states[i].NFAStates.size(); j++) {
+                if (dfa.states[i].NFAStates[j].type == State::accept &&
+                    dfa.states[i].NFAStates[j].accepted_production.priority < min) {
+                    min_production = dfa.states[i].NFAStates[j].accepted_production;
+                    min = dfa.states[i].NFAStates[j].accepted_production.priority;
+                }
+            }
+            dfa.states[i].accepted_production = min_production;
+            dfa.accept_states.push_back(dfa.states[i]);
         }
     }
     return dfa;
 }
 
 vector<State> DFABuilder::LClosure(State state) {
+    state = global_nfa.states[state.id];
     vector<State> l_closure;
-    set<State> set;
+    set<int> set;
     stack<State> stack;
     stack.push(state);
-    set.insert(state);
+    set.insert(state.id);
     while (!stack.empty()) {
         State t = stack.top();
         stack.pop();
+        l_closure.push_back(t);
         auto tmp = t.transitions.find(Symbol(special, "L"));
         if (tmp == t.transitions.end()) continue;
         vector<State> vec = tmp->second;
         for (int j = 0; j < vec.size(); j++) {
-            stack.push(vec[j]);
-            l_closure.push_back(vec[j]);
+            if (set.find(vec[j].id) == set.end()) {
+                stack.push(global_nfa.states[vec[j].id]);
+                set.insert(vec[j].id);
+            }
         }
     }
     return l_closure;
@@ -68,9 +90,25 @@ map<vector<State>, int> found_before;
 
 DFAState DFABuilder::merge_states(vector<State> vector) {
     DFAState res;
+    std::set<int> ids;
+    for (int i = 0; i < vector.size(); i++) {
+        ids.insert(vector[i].id);
+    }
     res.type = DFAState::internal;
     for (int i = 0; i < vector.size(); i++) {
-        res.transitions.insert(vector[i].transitions.begin(), vector[i].transitions.end());
+        auto it = vector[i].transitions.begin();
+        while (it != vector[i].transitions.end()) {
+            std::vector<State> next_transition;
+            for (int j = 0; j < it->second.size(); j++) {
+                if (ids.find(it->second[j].id) == ids.end()) {
+                    next_transition.push_back(global_nfa.states[it->second[j].id]);
+                }
+            }
+            if (next_transition.size() != 0)
+                res.transitions.insert(pair<Symbol, std::vector<State>>(it->first, next_transition));
+            it++;
+        }
+        vector[i].transitions = res.transitions;
         res.NFAStates.insert(res.NFAStates.begin(), vector[i]);
         if (vector[i].type == State::accept) res.type = DFAState::accept;
         else if (vector[i].type == State::start) res.type = DFAState::start;

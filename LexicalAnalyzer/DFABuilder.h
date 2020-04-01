@@ -12,7 +12,7 @@
 
 class DFABuilder {
 public:
-    DFA basicConstruct(FinalNFA nonDeterministicAutomata);
+    DFA basicConstruct(NFA nonDeterministicAutomata);
 
     vector<State> LClosure(State state);
 
