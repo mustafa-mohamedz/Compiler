@@ -2,6 +2,7 @@
 #include <NFABuilder.h>
 #include <State.h>
 #include <InputParser.h>
+#include <FinalNFA.h>
 #include "LexicalAnalyzer/ProgramReader.h"
 
 using namespace std;
@@ -87,19 +88,26 @@ using namespace std;
 int main() {
 
     std::cout << "starting!!" << std::endl;
-    RegularGrammar rg("..//Compiler//input sample 1.txt");
+    RegularGrammar rg("..//input sample 1.txt");
+    rg.terminals.insert(Symbol(special, "L"));
     InputParser parser(rg);
+    vector<NFA> result = parser.get_NFA();
+
+    FinalNFA final(result, rg.terminals);
+
+
+    for(NFA n : result){
+        n.printNFA(rg.terminals);
+    }
 
 //    NFA result = parser.get_NFA();
 //    DFA dfa(result);
 //    ProgramReader pr("",dfa);
 
 
-//    string str = "((a)|(b))|(c)";
+    string str = "((a)|(b))|(c)";
 
 
-//    Node* root = getTree(str, 0, str.length() - 1);
-//    preOrder(root);
 
 
 
@@ -110,23 +118,35 @@ int main() {
                             Symbol(special, ")"), Symbol(special, "|"),
                             Symbol(terminal, "c"), Symbol(special, "*")};
 */
-    vector<Symbol> input = {Symbol(terminal, "a"),Symbol(special, "+")};
-    RegularGrammar r;
-    Production p;
-    Symbol lhs (nonTerminal, "test");
-    p.LHS = lhs;
-    p.RHS = input;
-
-    r.regularExpression.push_back(p);
-    r.terminals = symbols;
-    InputParser parser1(r);
-    vector<Production> v1 = parser1.postfix_productions;
-
-    vector<NFA> result = parser1.get_NFA();
-
-    result[0].printNFA(symbols);
-
-    string str = "((a)|(b))|(c)";
+//    vector<Symbol> input = {Symbol(terminal, "a"),Symbol(special, "*"),
+//                            Symbol(special, "|"), Symbol(terminal, "b")};
+//
+//    vector<Symbol> input1 = {Symbol(terminal, "a"),Symbol(special, "*"),
+//                            Symbol(special, "."), Symbol(terminal, "b")};
+//
+//    RegularGrammar r;
+//    Production p;
+//    Symbol lhs (nonTerminal, "test");
+//    p.LHS = lhs;
+//    p.RHS = input;
+//
+//    Production p1;
+//    Symbol lhs1 (nonTerminal, "test1");
+//    p1.LHS = lhs1;
+//    p1.RHS = input1;
+//
+//    r.regularExpression.push_back(p);
+//    r.regularExpression.push_back(p1);
+//    r.terminals = symbols;
+//    InputParser parser1(r);
+//    vector<Production> v1 = parser1.postfix_productions;
+//
+//    vector<NFA> result = parser1.get_NFA();
+//
+//    result[0].printNFA(symbols);
+//    result[1].printNFA(symbols);
+//
+//    string str = "((a)|(b))|(c)";
 
 
 

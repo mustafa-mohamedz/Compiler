@@ -12,7 +12,7 @@
 class NFABuilder {
     public:
     set<Symbol> alphabet;
-    NFA basicConstruct(Symbol s);
+    NFA getNFA_of(Symbol s);
     NFA concatinate(NFA n1, NFA n2);
     NFA oring(NFA n1, NFA n2);
     NFA extended_closure(NFA nfa);

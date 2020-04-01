@@ -9,8 +9,8 @@
 NFABuilder::NFABuilder(set<Symbol> alphabet){
     this->alphabet = alphabet;
 }
-//TODO Remove basicConstruct
-NFA NFABuilder::basicConstruct(Symbol s) {
+
+NFA NFABuilder::getNFA_of(Symbol s) {
     NFA basic_nfa;
     //create the states
     vector<State> states;

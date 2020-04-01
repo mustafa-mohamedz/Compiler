@@ -12,10 +12,11 @@ InputParser::InputParser(RegularGrammar input) {
 
 vector<NFA> InputParser::get_NFA() {
     vector<NFA> result_nfa;
+    int counter = 0;
     for(Production p : postfix_productions){
         stack <NFA> s;
         for (Symbol current : p.RHS) {
-            if (current.type == terminal) s.push(builder.basicConstruct(current));
+            if (current.type == terminal || (current.type == special && current.value == "L")) s.push(builder.getNFA_of(current));
             else if (current.type == special){
                 if(current.value == "*" ){
                     NFA temp = s.top();
@@ -43,14 +44,17 @@ vector<NFA> InputParser::get_NFA() {
                 }
             }
         }
-        result_nfa.push_back(s.top());
+        NFA temp = s.top();
+        temp.accept_state.accepted_production = input.regularExpression[counter];
+        result_nfa.push_back(temp);
         s.pop();
+        counter++;
     }
     return result_nfa;
 }
 
 NFA InputParser::getNFA_of(Symbol c){
-    return builder.basicConstruct(c);
+    return builder.getNFA_of(c);
 }
 
 int InputParser::getPrecedence(Symbol s) {
@@ -69,7 +73,7 @@ vector<Production> InputParser::getPostfix() {
         Production updated_production;
         updated_production.LHS = p.LHS;
         for(Symbol current_symbol : original_regex) {
-            if (current_symbol.type == terminal) p_regex_postfix.push_back(current_symbol);
+            if (current_symbol.type == terminal || (current_symbol.type == special && current_symbol.value == "L")) p_regex_postfix.push_back(current_symbol);
             else if (current_symbol.value == "(" && current_symbol.type == special) s.push(current_symbol);
             else if (current_symbol.value == ")" && current_symbol.type == special){
                 while (!s.empty() && s.top().value != "("){
