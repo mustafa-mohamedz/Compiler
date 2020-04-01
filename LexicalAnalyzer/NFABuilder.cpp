@@ -2,7 +2,6 @@
 // Created by Ahmed on 3/24/2020.
 //
 
-#include <winsock.h>
 #include "NFABuilder.h"
 #include "NFA.h"
 //TODO Remove alphabet
