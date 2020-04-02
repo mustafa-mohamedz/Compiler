@@ -11,7 +11,9 @@ FinalNFA::FinalNFA(std::vector<NFA> NFAList, set<Symbol> alphabet) {
         //Update all states
         for (int i = 0; i < NFAList[j].states.size(); ++i) {
             NFAList[j].states[i].updateBy(updateCounter, alphabet);
-            NFAList[j].states[i].type = State::internal;
+            if(NFAList[j].states[i].type == State::start){
+                NFAList[j].states[i].type = State::internal;
+            }
         }
         updateCounter += NFAList[j].states.size();
     }
@@ -27,6 +29,7 @@ FinalNFA::FinalNFA(std::vector<NFA> NFAList, set<Symbol> alphabet) {
     start_transitions.insert({Symbol(special, "L"), next_states});
     State start_of_result(State::start, 0, start_transitions);
     this->start_state = start_of_result;
+    this->all_state_list.push_back(start_of_result);
 
     //add accept states
     for (vector<NFA>::size_type j = 0; j < NFAList.size(); j++) {
@@ -37,7 +40,7 @@ FinalNFA::FinalNFA(std::vector<NFA> NFAList, set<Symbol> alphabet) {
     for (vector<NFA>::size_type j = 0; j < NFAList.size(); j++) {
         //insert all states
         for (int i = 0; i < NFAList[j].states.size() - 1; ++i) {
-            this->internal_state_list.push_back(NFAList[j].states[i]);
+            this->all_state_list.push_back(NFAList[j].states[i]);
 
         }
     }

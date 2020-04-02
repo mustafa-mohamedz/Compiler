@@ -5,15 +5,15 @@
 #include "DFABuilder.h"
 
 using namespace std;
-NFA global_nfa;
+FinalNFA global_nfa;
 
-DFA DFABuilder::basicConstruct(NFA nonDeterministicAutomata) {
+DFA DFABuilder::basicConstruct(FinalNFA nonDeterministicAutomata) {
     global_nfa = nonDeterministicAutomata;
     DFA dfa;
     State s0 = nonDeterministicAutomata.start_state;
     set<DFAState> set;
     queue<DFAState> queue;
-    DFAState closure = merge_states(LClosure(s0));
+    DFAState closure = build_DFA_state(LClosure(s0));
     set.insert(closure);
     queue.push(closure);
     while (!queue.empty()) {
@@ -22,7 +22,7 @@ DFA DFABuilder::basicConstruct(NFA nonDeterministicAutomata) {
         auto it = t.transitions.begin();
         while (it != t.transitions.end()) {
             std::vector<State> l_closure_vec = LClosureVec((it->second));
-            DFAState u = merge_states(l_closure_vec);
+            DFAState u = build_DFA_state(l_closure_vec);
             if (set.find(u) == set.end()) {
                 set.insert(u);
                 queue.push(u);
@@ -53,7 +53,7 @@ DFA DFABuilder::basicConstruct(NFA nonDeterministicAutomata) {
 }
 
 vector<State> DFABuilder::LClosure(State state) {
-    state = global_nfa.states[state.id];
+    state = global_nfa.all_state_list[state.id];
     vector<State> l_closure;
     set<int> set;
     stack<State> stack;
@@ -68,7 +68,7 @@ vector<State> DFABuilder::LClosure(State state) {
         vector<State> vec = tmp->second;
         for (int j = 0; j < vec.size(); j++) {
             if (set.find(vec[j].id) == set.end()) {
-                stack.push(global_nfa.states[vec[j].id]);
+                stack.push(global_nfa.all_state_list[vec[j].id]);
                 set.insert(vec[j].id);
             }
         }
@@ -88,7 +88,7 @@ vector<State> DFABuilder::LClosureVec(vector<State> state_vec) {
 int id = 0;
 map<vector<State>, int> found_before;
 
-DFAState DFABuilder::merge_states(vector<State> vector) {
+DFAState DFABuilder::build_DFA_state(vector<State> vector) {
     DFAState res;
     std::set<int> ids;
     for (int i = 0; i < vector.size(); i++) {
@@ -101,7 +101,7 @@ DFAState DFABuilder::merge_states(vector<State> vector) {
             std::vector<State> next_transition;
             for (int j = 0; j < it->second.size(); j++) {
                 if (ids.find(it->second[j].id) == ids.end()) {
-                    next_transition.push_back(global_nfa.states[it->second[j].id]);
+                    next_transition.push_back(global_nfa.all_state_list[it->second[j].id]);
                 }
             }
             if (next_transition.size() != 0)
@@ -111,7 +111,7 @@ DFAState DFABuilder::merge_states(vector<State> vector) {
         vector[i].transitions = res.transitions;
         res.NFAStates.insert(res.NFAStates.begin(), vector[i]);
         if (vector[i].type == State::accept) res.type = DFAState::accept;
-        else if (vector[i].type == State::start) res.type = DFAState::start;
+        else if (vector[i].type == State::start && res.type != DFAState::accept) res.type = DFAState::start;
     }
     if (found_before.find(res.NFAStates) == found_before.end()) {
         res.id = id++;

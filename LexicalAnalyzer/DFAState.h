@@ -23,7 +23,9 @@ public:
     bool operator<(const DFAState &x) const {
         return x.id > id;
     }
-
+    bool operator == (const DFAState &x) const {
+        return x.id == id;
+    }
     DFAState(Type type, int n, map<Symbol, std::vector<State>> t);
 
     DFAState() {};

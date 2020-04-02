@@ -18,7 +18,12 @@ int main() {
     FinalNFA finalNfa(temp, rg.terminals);
     DFABuilder dfaBuilder;
     DFA dfa = dfaBuilder.basicConstruct(finalNfa);
-
+    MinimizedDFA mDFA(dfa, rg.terminals);
+    ProgramReader pr("",mDFA);
+    vector<Token> tokens = pr.getTokens();
+    for (int i = 0; i < tokens.size(); ++i) {
+        cout << tokens[i].value << endl;
+    }
     return 0;
 }
 
