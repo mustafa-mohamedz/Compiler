@@ -17,7 +17,8 @@ int main() {
     vector<NFA> temp = parser.get_NFA();
     FinalNFA finalNfa(temp, rg.terminals);
     DFABuilder dfaBuilder;
-    DFA dfa = dfaBuilder.basicConstruct(temp[0]);
+    DFA dfa = dfaBuilder.basicConstruct(finalNfa);
+
     return 0;
 }
 
