@@ -107,8 +107,17 @@ DFAState DFABuilder::build_DFA_state(vector<State> vector) {
                     self_loop_symbols.insert(it->first);
                 }
             }
-            if (next_transition.size() != 0)
-                res.transitions.insert(pair<Symbol, std::vector<State>>(it->first, next_transition));
+            if (next_transition.size() != 0) {
+                if (res.transitions.find(it->first) == res.transitions.end()) {
+                    res.transitions.insert(pair<Symbol, std::vector<State>>(it->first, next_transition));
+                } else {
+                    std::vector<State> updated_transitions = res.transitions.find(it->first)->second;
+                    updated_transitions.insert(updated_transitions.end(), next_transition.begin(),
+                                               next_transition.end());
+                    res.transitions.erase(it->first);
+                    res.transitions.insert(pair<Symbol, std::vector<State>>(it->first, updated_transitions));
+                }
+            }
             it++;
         }
         vector[i].transitions = res.transitions;
