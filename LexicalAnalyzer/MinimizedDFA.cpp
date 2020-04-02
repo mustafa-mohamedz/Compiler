@@ -31,7 +31,7 @@ vector<set<DFAState>> MinimizedDFA::getInitialPartitions(const DFA &dfa) {
     }
     result.push_back(internalStates);
 
-    map<string,set<DFAState>> productionToStatesMap;
+    unordered_map<string,set<DFAState>> productionToStatesMap;
     for (int j = 0; j < dfa.accept_states.size() ; ++j) {
         string acceptedToken = dfa.accept_states[j].accepted_production.LHS.value;
         set<DFAState> tempSet;
@@ -51,16 +51,18 @@ vector<set<DFAState>> MinimizedDFA::getInitialPartitions(const DFA &dfa) {
 
 vector<set<DFAState>> MinimizedDFA::divideSet(const vector<set<DFAState>>& oldPartitions,set<DFAState> workingSet,const set<Symbol> &alphabet) {
     vector<set<DFAState>> dividedSet;
-    map<int,int> stateToPartitionMap = mapStateToPartition(oldPartitions);
-    map<vector<int>,set<DFAState>> rowToNewPartitionMap;
+    unordered_map<int,int> stateToPartitionMap = mapStateToPartition(oldPartitions);
+    unordered_map<string,set<DFAState>> rowToNewPartitionMap;
     for (auto const state : workingSet){
-        vector<int> row;
+        string row;
         for (const auto s : alphabet) {
             auto nextState = state.DFATransitions.find(s);
             if(nextState == state.DFATransitions.end()){
-                row.push_back(-1);
+                row += to_string(-1);
+                row.push_back(',');
             }else{
-                row.push_back(stateToPartitionMap.find(nextState->second)->second);
+                row += to_string(stateToPartitionMap.find(nextState->second)->second);
+                row.push_back(',');
             }
         }
         set<DFAState> tempSet;
@@ -77,8 +79,8 @@ vector<set<DFAState>> MinimizedDFA::divideSet(const vector<set<DFAState>>& oldPa
 
     return dividedSet;
 }
-map<int, int> MinimizedDFA::mapStateToPartition(const vector<set<DFAState>> &partitions) {
-    map<int,int>result;
+unordered_map<int, int> MinimizedDFA::mapStateToPartition(const vector<set<DFAState>> &partitions) {
+    unordered_map<int,int>result;
     for (int i = 0; i < partitions.size(); ++i) {
         for (const auto state : partitions[i]) {
             result.insert({state.id,i});
@@ -90,7 +92,7 @@ map<int, int> MinimizedDFA::mapStateToPartition(const vector<set<DFAState>> &par
 void MinimizedDFA::convertPartitionsToDFA(const vector<set<DFAState>> &partitions,const DFAState& startState) {
 
     vector<MinimizedState> states;
-    map<int,int> stateToPartitionMap = mapStateToPartition(partitions);
+    unordered_map<int,int> stateToPartitionMap = mapStateToPartition(partitions);
     for (int i = 0; i < partitions.size(); ++i) {
         MinimizedState ithState;
         ithState.id = i;
@@ -101,7 +103,7 @@ void MinimizedDFA::convertPartitionsToDFA(const vector<set<DFAState>> &partition
         }else{
             ithState.type = MinimizedState::internal;
         }
-        map<Symbol,int> ithStateTransitions;
+        unordered_map<Symbol,int,SymbolHashFunction> ithStateTransitions;
         for (auto transition : sampleState.DFATransitions) {
             ithStateTransitions.insert({transition.first,stateToPartitionMap.find(transition.second)->second});
         }
@@ -110,13 +112,16 @@ void MinimizedDFA::convertPartitionsToDFA(const vector<set<DFAState>> &partition
         states.push_back(ithState);
     }
     this->states = states;
-
+    bool startStateFound = false;
     for (int i = 0; i < partitions.size(); ++i) {
         for (const auto state : partitions[i]) {
             if(state.id == startState.id){
                 this->startState = stateToPartitionMap.find(state.id)->second;
+                startStateFound = true;
+                break;
             }
         }
+        if (startStateFound) break;
     }
 }
 

@@ -16,12 +16,7 @@ int main() {
     rg.terminals.insert(Symbol(special, "L"));
     InputParser parser(rg);
     vector<NFA> temp = parser.get_NFA();
-//    cout << temp.size() << endl;
-//    temp[0].printNFA(rg.terminals);
-//    cout << "break        !!!" << endl;
-//    temp[1].printNFA(rg.terminals);
     FinalNFA finalNfa(temp, rg.terminals);
-    finalNfa.print(rg.terminals);
     DFABuilder dfaBuilder;
     DFA dfa = dfaBuilder.basicConstruct(finalNfa);
     MinimizedDFA mDFA(dfa, rg.terminals);

@@ -5,13 +5,16 @@
 #ifndef COMPILER_MINIMIZEDDFA_H
 #define COMPILER_MINIMIZEDDFA_H
 #include "DFA.h"
+#include <unordered_map>
+
+
 class MinimizedState {
 public:
     enum Type {
         accept, internal
     } type;
     int id;
-    map<Symbol, int> transitions;
+    unordered_map<Symbol, int, SymbolHashFunction> transitions;
     Production accepted_production;
     bool operator<(const DFAState &x) const {
         return x.id > id;
@@ -21,7 +24,7 @@ class MinimizedDFA {
 
 private:
     vector<set<DFAState>> getInitialPartitions(const DFA& dfa);
-    map<int, int> mapStateToPartition(const vector<set<DFAState>> &vector);
+    unordered_map<int, int> mapStateToPartition(const vector<set<DFAState>> &vector);
     vector<set<DFAState>> divideSet(const vector<set<DFAState>>& oldPartitions,set<DFAState> workingSet,const set<Symbol> &alphabet);
     void convertPartitionsToDFA(const vector<set<DFAState>> &partitions,const DFAState& startState);
     void printBeforeSpaces(int l);

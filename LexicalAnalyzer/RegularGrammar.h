@@ -33,8 +33,19 @@ public:
         return value < x.value || (x.value == value && type < x.type);
     }
 
+    bool operator ==(const Symbol &x) const {
+        return x.value == value && type == x.type;
+    }
     Type type;
     std::string value;
+};
+
+class SymbolHashFunction {
+public:
+    size_t operator()(const Symbol& s) const{
+        string str = to_string(s.type) + s.value;
+        return (hash<string>()(str));
+    }
 };
 
 class Production {
