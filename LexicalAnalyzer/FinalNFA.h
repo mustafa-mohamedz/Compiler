@@ -10,6 +10,7 @@ public:
     std::vector<State> accept_state_list;
     std::vector<State> all_state_list;
     FinalNFA(std::vector<NFA>, set<Symbol> alphabet);
+    void print(set<Symbol> alphabet);
     FinalNFA(){}
 
 };

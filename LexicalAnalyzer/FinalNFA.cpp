@@ -45,3 +45,18 @@ FinalNFA::FinalNFA(std::vector<NFA> NFAList, set<Symbol> alphabet) {
 
     }
 }
+
+void FinalNFA::print(set<Symbol> alphabet) {
+    for (int i = 0; i < this->all_state_list.size(); ++i) {
+        State s = this->all_state_list[i];
+        std::cout << "State " << s.id << std::endl;
+        for (auto elem : alphabet) {
+            if (s.transitions.find(elem) != s.transitions.end()){
+                std::vector<State> next = s.transitions.find(elem)->second;
+                for (int k = 0; k < next.size(); ++k) {
+                    std::cout << "#i/p: " << elem.value << std::endl << s.id << "-->" << next[k].id << std::endl;
+                }
+            }
+        }
+    }
+}

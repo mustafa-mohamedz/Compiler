@@ -16,6 +16,7 @@ int main() {
     InputParser parser(rg);
     vector<NFA> temp = parser.get_NFA();
     FinalNFA finalNfa(temp, rg.terminals);
+    finalNfa.print(rg.terminals);
     DFABuilder dfaBuilder;
     DFA dfa = dfaBuilder.basicConstruct(finalNfa);
     MinimizedDFA mDFA(dfa, rg.terminals);
