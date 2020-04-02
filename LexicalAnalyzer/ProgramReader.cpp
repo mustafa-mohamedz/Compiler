@@ -40,18 +40,20 @@ vector<Token> ProgramReader::processStringBlock(const std::string &stringBlock, 
             numOfUndoChars++;
         }
         nextStart -= numOfUndoChars;
-//        nextStart = (numOfUndoChars == 0) ? nextStart : nextStart - numOfUndoChars + 1;
+
+        std::string message;
         if(history.empty()){//could not accept any block
             nextStart = currentStart;//restart the nextStart pointer
             stringBlock.substr(currentStart,stringBlock.size() - currentStart);
-            std::cout << "Error Can't process: "<< stringBlock.substr(currentStart,stringBlock.size() - currentStart) << std::endl;
-            std::cout << "Skip the next character: "<< stringBlock[nextStart] << std::endl;
+            message = std::string("Error Can't process: ") + stringBlock.substr(currentStart,stringBlock.size() - currentStart) + " ,Skip the next character: " + stringBlock[nextStart] + "\n";
             //skip char and try to process again
             nextStart++;
         }else{//block accepted
             Production acceptedProduction = dfa.states[history.top()].accepted_production;
             result.push_back(Token(acceptedProduction.LHS.value,stringBlock.substr(currentStart,nextStart - currentStart)));
+            message = acceptedProduction.LHS.value + " : " + stringBlock.substr(currentStart,nextStart - currentStart) + "\n";
         }
+        messageList.push_back(message);
         currentStart = nextStart;
     }
     return result;
@@ -70,4 +72,8 @@ Token ProgramReader::getNextToken() {
         throw "No more Tokens";
     }
     return this->tokenList[this->tokenIndex++];
+}
+
+vector<string> ProgramReader::getMessages() {
+    return messageList;
 }

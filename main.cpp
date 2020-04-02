@@ -27,10 +27,10 @@ int main() {
     MinimizedDFA mDFA(dfa, rg.terminals);
     mDFA.printDFA(tempAlpha);
     ProgramReader pr("..//program sample 1.txt",mDFA);
-    vector<Token> tokens = pr.getTokens();
+    vector<string> messageList = pr.getMessages();
     cout << endl;
-    for (int i = 0; i < tokens.size(); ++i) {
-        cout << tokens[i].type << " : " <<tokens[i].value << endl;
+    for (int i = 0; i < messageList.size(); ++i) {
+        cout << messageList[i] << endl;
     }
     return 0;
 }
