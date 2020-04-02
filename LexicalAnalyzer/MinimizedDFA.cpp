@@ -57,7 +57,7 @@ vector<set<DFAState>> MinimizedDFA::divideSet(const vector<set<DFAState>>& oldPa
             if(nextState == state.DFATransitions.end()){
                 row.push_back(-1);
             }else{
-                row.push_back(stateToPartitionMap.find(nextState->second.id)->second);
+                row.push_back(stateToPartitionMap.find(nextState->second)->second);
             }
         }
         set<DFAState> tempSet;
@@ -100,7 +100,7 @@ void MinimizedDFA::convertPartitionsToDFA(const vector<set<DFAState>> &partition
         }
         map<Symbol,int> ithStateTransitions;
         for (auto transition : sampleState.DFATransitions) {
-            ithStateTransitions.insert({transition.first,stateToPartitionMap.find(transition.second.id)->second});
+            ithStateTransitions.insert({transition.first,stateToPartitionMap.find(transition.second)->second});
         }
         ithState.transitions = ithStateTransitions;
 

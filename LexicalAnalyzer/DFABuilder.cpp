@@ -27,7 +27,7 @@ DFA DFABuilder::basicConstruct(FinalNFA nonDeterministicAutomata) {
                 set.insert(u);
                 queue.push(u);
             }
-            if (u.NFAStates.size() != 0) t.DFATransitions.insert(pair<Symbol, DFAState>(it->first, u));
+            if (u.NFAStates.size() != 0) t.DFATransitions.insert(pair<Symbol, int>(it->first, u.id));
             it++;
         }
         dfa.states.push_back(t);
@@ -91,6 +91,7 @@ map<vector<State>, int> found_before;
 DFAState DFABuilder::build_DFA_state(vector<State> vector) {
     DFAState res;
     std::set<int> ids;
+    std::set<Symbol> self_loop_symbols;
     for (int i = 0; i < vector.size(); i++) {
         ids.insert(vector[i].id);
     }
@@ -102,6 +103,8 @@ DFAState DFABuilder::build_DFA_state(vector<State> vector) {
             for (int j = 0; j < it->second.size(); j++) {
                 if (ids.find(it->second[j].id) == ids.end()) {
                     next_transition.push_back(global_nfa.all_state_list[it->second[j].id]);
+                } else {
+                    self_loop_symbols.insert(it->first);
                 }
             }
             if (next_transition.size() != 0)
@@ -118,6 +121,11 @@ DFAState DFABuilder::build_DFA_state(vector<State> vector) {
         found_before.insert({res.NFAStates, res.id});;
     } else {
         res.id = found_before.find(res.NFAStates)->second;
+    }
+    auto it = self_loop_symbols.begin();
+    while (it != self_loop_symbols.end()) {
+        if (it->type != special || it->value != "L") res.DFATransitions.insert({*it, res.id});
+        it++;
     }
     return res;
 }

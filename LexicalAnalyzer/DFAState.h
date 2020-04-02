@@ -18,7 +18,7 @@ public:
     int id;
     std::vector<State> NFAStates;
     map<Symbol, std::vector<State>> transitions;
-    map<Symbol, DFAState> DFATransitions;
+    map<Symbol, int> DFATransitions;
     Production accepted_production;
     bool operator<(const DFAState &x) const {
         return x.id > id;
