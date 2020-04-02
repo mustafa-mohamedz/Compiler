@@ -60,9 +60,9 @@ NFA InputParser::getNFA_of(Symbol c){
 
 int InputParser::getPrecedence(Symbol s) {
     if (s.value == "|") return 1;
-    if (s.value == ".") return 1;
-    if (s.value == "*") return 2;
-    if (s.value == "+") return 2;
+    if (s.value == ".") return 2;
+    if (s.value == "*") return 3;
+    if (s.value == "+") return 3;
     return -1;
 }
 
@@ -84,7 +84,7 @@ vector<Production> InputParser::getPostfix() {
                 if (s.top().value == "(") s.pop();
             }
             else {
-                while(!s.empty() && getPrecedence(s.top()) > getPrecedence(current_symbol)){
+                while(!s.empty() && getPrecedence(s.top()) >= getPrecedence(current_symbol)){
                     p_regex_postfix.push_back(s.top());
                     s.pop();
                 }

@@ -113,6 +113,7 @@ vector<Symbol> RegularGrammar::processSpecial(const string &str, int &index) {
 
         } else {
             Symbol currentSymbol(terminal, string(1, str[index + 1]));
+            terminals.insert(currentSymbol);
             result.push_back(currentSymbol);
         }
         index++;
