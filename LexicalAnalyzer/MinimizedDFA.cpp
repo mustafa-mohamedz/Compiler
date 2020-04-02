@@ -139,10 +139,18 @@ void MinimizedDFA::printDFA(const set<Symbol>& alphabet) {
             ++number_of_digits;
             n /= 10;
         } while (n);
-        printBeforeSpaces(number_of_digits);
-        cout << states[i].id;
-        MyFile << states[i].id;
-        printAfterSpaces(number_of_digits);
+        if(states[i].type == DFAState::start){
+            printBeforeSpaces(number_of_digits + 2);
+            cout << "(" << states[i].id << ")";
+            MyFile << "(" << states[i].id << ")";
+            printAfterSpaces(number_of_digits + 2);
+        }
+        else{
+            printBeforeSpaces(number_of_digits);
+            cout << states[i].id;
+            MyFile << states[i].id;
+            printAfterSpaces(number_of_digits);
+        }
         for (const auto s : alphabet) {
             auto itr = states[i].transitions.find(s);
                if(itr != states[i].transitions.end()){
@@ -152,10 +160,18 @@ void MinimizedDFA::printDFA(const set<Symbol>& alphabet) {
                        ++number_of_digits;
                        n /= 10;
                    } while (n);
-                   printBeforeSpaces(number_of_digits);
-                   cout << itr->second;
-                   MyFile << itr->second;
-                   printAfterSpaces(number_of_digits);
+                   if(states[i].type == DFAState::start){
+                       printBeforeSpaces(number_of_digits + 2);
+                       cout << "(" << itr->second << ")";
+                       MyFile << "(" << itr->second << ")";
+                       printAfterSpaces(number_of_digits + 2);
+                   }
+                   else{
+                       printBeforeSpaces(number_of_digits);
+                       cout << itr->second;
+                       MyFile << itr->second;
+                       printAfterSpaces(number_of_digits);
+                   }
                }
                else{
                    cout << "  e   |";
