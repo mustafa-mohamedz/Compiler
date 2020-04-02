@@ -6,7 +6,7 @@
 
 MinimizedDFA::MinimizedDFA(const DFA &dfa,const set<Symbol> &alphabet) {
     vector<set<DFAState>> oldPartitions;
-    vector<set<DFAState>> newPartitions = getInitialPartitions(dfa);;
+    vector<set<DFAState>> newPartitions = getInitialPartitions(dfa);
     while(!(newPartitions == oldPartitions)){
         oldPartitions = newPartitions;
         newPartitions.clear();

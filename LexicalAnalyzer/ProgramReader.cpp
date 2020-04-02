@@ -44,6 +44,7 @@ vector<Token> ProgramReader::processStringBlock(const std::string &stringBlock, 
             std::cout << "Error Can't process: "<< stringBlock.substr(currentStart,stringBlock.size() - currentStart) << std::endl;
             //skip char and try to process again
             currentEnd++;
+            currentEnd++;
         }else{//block accepted
             Production acceptedProduction = dfa.states[history.top()].accepted_production;
             result.push_back(Token(acceptedProduction.LHS.value,stringBlock.substr(currentStart,currentEnd - currentStart)));

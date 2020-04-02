@@ -46,6 +46,7 @@ vector<NFA> InputParser::get_NFA() {
         }
         NFA temp = s.top();
         temp.accept_state.accepted_production = input.regularExpression[counter];
+        temp.states[temp.states.size() - 1].accepted_production = input.regularExpression[counter];
         result_nfa.push_back(temp);
         s.pop();
         counter++;

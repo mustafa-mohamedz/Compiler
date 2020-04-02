@@ -19,7 +19,7 @@ int main() {
     DFABuilder dfaBuilder;
     DFA dfa = dfaBuilder.basicConstruct(finalNfa);
     MinimizedDFA mDFA(dfa, rg.terminals);
-    ProgramReader pr("",mDFA);
+    ProgramReader pr("..//program sample 1.txt",mDFA);
     vector<Token> tokens = pr.getTokens();
     for (int i = 0; i < tokens.size(); ++i) {
         cout << tokens[i].value << endl;

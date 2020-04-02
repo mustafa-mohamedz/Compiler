@@ -36,12 +36,12 @@ FinalNFA::FinalNFA(std::vector<NFA> NFAList, set<Symbol> alphabet) {
         this->accept_state_list.push_back(NFAList[j].accept_state);
     }
 
-    //Internal states addition
+    //All states addition
     for (vector<NFA>::size_type j = 0; j < NFAList.size(); j++) {
         //insert all states
-        for (int i = 0; i < NFAList[j].states.size() - 1; ++i) {
+        for (int i = 0; i < NFAList[j].states.size(); ++i) {
             this->all_state_list.push_back(NFAList[j].states[i]);
-
         }
+
     }
 }
