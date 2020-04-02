@@ -183,9 +183,10 @@ void MinimizedDFA::printDFA(const set<Symbol>& alphabet) {
         }
         printHLine(alphabet.size() * 4);
     }
-    cout << "Accepted Productions:" << endl;
+    MyFile << "Accepted Productions:" << endl;
     for(MinimizedState s : accept_states){
         cout << "   State " << s.id << " accepts the production: " << s.accepted_production.LHS.value << endl;
+        MyFile << "   State " << s.id << " accepts the production: " << s.accepted_production.LHS.value << endl;
     }
     MyFile.close();
 }
