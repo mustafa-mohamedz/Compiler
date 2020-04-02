@@ -24,8 +24,12 @@ private:
     map<int, int> mapStateToPartition(const vector<set<DFAState>> &vector);
     vector<set<DFAState>> divideSet(const vector<set<DFAState>>& oldPartitions,set<DFAState> workingSet,const set<Symbol> &alphabet);
     void convertPartitionsToDFA(const vector<set<DFAState>> &partitions,const DFAState& startState);
+    void printBeforeSpaces(int l);
+    void printAfterSpaces(int l);
+    void printHLine(int l);
 public:
     MinimizedDFA(const DFA& dfa,const set<Symbol>& alphabet);
+    void printDFA(const set<Symbol>& alphabet);
     int startState;
     vector<MinimizedState> states;
 };
