@@ -19,37 +19,39 @@ ProgramReader::ProgramReader(const std::string& programPath, const MinimizedDFA&
 
 vector<Token> ProgramReader::processStringBlock(const std::string &stringBlock, const MinimizedDFA &dfa) {
     vector<Token> result;
-    std::string::size_type currentStart = 0, currentEnd = 0;
+    std::string::size_type currentStart = 0, nextStart = 0;
     while(currentStart < stringBlock.size()){
-        int currentState = dfa.startState;
+        int currentStateId = dfa.startState;
         stack <int> history;
-        history.push(currentState);
+        history.push(currentStateId);
         //parse the whole stringBlock to get the final state
-        for (std::string::size_type i = currentEnd; i < stringBlock.size(); i++, currentEnd++) {
-            auto nextState = dfa.states[currentStart].transitions.find(Symbol(terminal,std::string(1, stringBlock[i])));
-            if(nextState == dfa.states[currentStart].transitions.end()){
+        for (std::string::size_type i = nextStart; i < stringBlock.size(); i++, nextStart++) {
+            auto nextState = dfa.states[currentStateId].transitions.find(Symbol(terminal, std::string(1, stringBlock[i])));
+            if(nextState == dfa.states[currentStateId].transitions.end()){
                 break;
             }
-            currentState = nextState->second;
-            history.push(currentState);
+            currentStateId = nextState->second;
+            history.push(currentStateId);
         }
         //get the maximal munch
+        int numOfUndoChars = 0;
         while(! history.empty() && dfa.states[history.top()].type != MinimizedState::accept){
             history.pop();
-            currentEnd--;
+            numOfUndoChars++;
         }
-        //could not accept any block
-        if(history.empty()){
+        nextStart = (numOfUndoChars == 0) ? nextStart : nextStart - numOfUndoChars + 1;
+        if(history.empty()){//could not accept any block
+            nextStart = currentStart;//restart the nextStart pointer
             stringBlock.substr(currentStart,stringBlock.size() - currentStart);
             std::cout << "Error Can't process: "<< stringBlock.substr(currentStart,stringBlock.size() - currentStart) << std::endl;
+            std::cout << "Skip the next character: "<< stringBlock[nextStart] << std::endl;
             //skip char and try to process again
-            currentEnd++;
-            currentEnd++;
+            nextStart++;
         }else{//block accepted
             Production acceptedProduction = dfa.states[history.top()].accepted_production;
-            result.push_back(Token(acceptedProduction.LHS.value,stringBlock.substr(currentStart,currentEnd - currentStart)));
+            result.push_back(Token(acceptedProduction.LHS.value,stringBlock.substr(currentStart,nextStart - currentStart)));
         }
-        currentStart = currentEnd;
+        currentStart = nextStart;
     }
     return result;
 }
