@@ -20,10 +20,13 @@ int main() {
     temp[0].printNFA(rg.terminals);
     FinalNFA finalNfa(temp, rg.terminals);
     //finalNfa.print(rg.terminals);
+    cout << "NFA is done" << endl;
     DFABuilder dfaBuilder;
     DFA dfa = dfaBuilder.basicConstruct(finalNfa);
+    cout << "DFA is done" << endl;
     MinimizedDFA mDFA(dfa, rg.terminals);
     mDFA.printDFA(tempAlpha);
+    cout << "MDFA is done" << endl;
     ProgramReader pr("..//program sample 1.txt",mDFA);
     vector<Token> tokens = pr.getTokens();
     cout << endl;

@@ -121,6 +121,7 @@ void MinimizedDFA::convertPartitionsToDFA(const vector<set<DFAState>> &partition
 }
 
 void MinimizedDFA::printDFA(const set<Symbol>& alphabet) {
+    cout << "Start State: " << this->startState << endl;
     cout << "  State  |";
     MyFile << "  State  |";
     for (const auto s : alphabet) {
@@ -139,7 +140,7 @@ void MinimizedDFA::printDFA(const set<Symbol>& alphabet) {
             ++number_of_digits;
             n /= 10;
         } while (n);
-        if(states[i].type == DFAState::start){
+        if(states[i].type == MinimizedState::accept){
             printBeforeSpaces(number_of_digits + 2);
             cout << "(" << states[i].id << ")";
             MyFile << "(" << states[i].id << ")";
@@ -160,7 +161,7 @@ void MinimizedDFA::printDFA(const set<Symbol>& alphabet) {
                        ++number_of_digits;
                        n /= 10;
                    } while (n);
-                   if(states[i].type == DFAState::start){
+                   if(states[itr->second].type == MinimizedState::accept){
                        printBeforeSpaces(number_of_digits + 2);
                        cout << "(" << itr->second << ")";
                        MyFile << "(" << itr->second << ")";
@@ -180,6 +181,8 @@ void MinimizedDFA::printDFA(const set<Symbol>& alphabet) {
         }
         printHLine(alphabet.size() * 4);
     }
+    
+
     MyFile.close();
 }
 
