@@ -3,7 +3,10 @@
 //
 
 #include "MinimizedDFA.h"
+#include <fstream>
+#include <iostream>
 
+ofstream MyFile("..//DFA.txt");
 MinimizedDFA::MinimizedDFA(const DFA &dfa,const set<Symbol> &alphabet) {
     vector<set<DFAState>> oldPartitions;
     vector<set<DFAState>> newPartitions = getInitialPartitions(dfa);
@@ -117,4 +120,79 @@ void MinimizedDFA::convertPartitionsToDFA(const vector<set<DFAState>> &partition
     }
 }
 
+void MinimizedDFA::printDFA(const set<Symbol>& alphabet) {
+    cout << "  State  |";
+    MyFile << "  State  |";
+    for (const auto s : alphabet) {
+        int l = s.value.length();
+        printBeforeSpaces(l);
+        cout << s.value;
+        MyFile << s.value;
+        printAfterSpaces(l);
+    }
+    printHLine(alphabet.size() * 4);
 
+    for (int i = 0; i < this->states.size(); ++i) {
+        int n = states[i].id;
+        int number_of_digits = 0;
+        do {
+            ++number_of_digits;
+            n /= 10;
+        } while (n);
+        printBeforeSpaces(number_of_digits);
+        cout << states[i].id;
+        MyFile << states[i].id;
+        printAfterSpaces(number_of_digits);
+        for (const auto s : alphabet) {
+            auto itr = states[i].transitions.find(s);
+               if(itr != states[i].transitions.end()){
+                   n = itr->second;
+                   number_of_digits = 0;
+                   do {
+                       ++number_of_digits;
+                       n /= 10;
+                   } while (n);
+                   printBeforeSpaces(number_of_digits);
+                   cout << itr->second;
+                   MyFile << itr->second;
+                   printAfterSpaces(number_of_digits);
+               }
+               else{
+                   cout << "  e   |";
+                   MyFile << "  e   |";
+               }
+        }
+        printHLine(alphabet.size() * 4);
+    }
+    MyFile.close();
+}
+
+void MinimizedDFA::printBeforeSpaces(int l){
+    int num_of_spaces = (6 - l) / 2;
+    for (int i = 0; i < num_of_spaces; ++i) {
+        cout << " ";
+        MyFile << " ";
+    }
+}
+
+void MinimizedDFA::printAfterSpaces(int l){
+    int num_of_spaces = (6 - l) / 2;
+    if(l % 2 == 1) num_of_spaces++;
+    for (int i = 0; i < num_of_spaces; ++i) {
+        cout << " ";
+        MyFile << " ";
+    }
+    cout << "|";
+    MyFile << "|";
+}
+
+void MinimizedDFA::printHLine(int l) {
+    cout << endl;
+    MyFile << endl;
+    for (int i = 0; i < l; ++i) {
+        cout << "--";
+        MyFile << "--";
+    }
+    cout << endl << "   ";
+    MyFile << endl << "   ";
+}
