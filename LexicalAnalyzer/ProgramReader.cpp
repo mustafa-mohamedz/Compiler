@@ -39,7 +39,8 @@ vector<Token> ProgramReader::processStringBlock(const std::string &stringBlock, 
             history.pop();
             numOfUndoChars++;
         }
-        nextStart = (numOfUndoChars == 0) ? nextStart : nextStart - numOfUndoChars + 1;
+        nextStart -= numOfUndoChars;
+//        nextStart = (numOfUndoChars == 0) ? nextStart : nextStart - numOfUndoChars + 1;
         if(history.empty()){//could not accept any block
             nextStart = currentStart;//restart the nextStart pointer
             stringBlock.substr(currentStart,stringBlock.size() - currentStart);

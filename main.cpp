@@ -16,14 +16,14 @@ int main() {
     InputParser parser(rg);
     vector<NFA> temp = parser.get_NFA();
     FinalNFA finalNfa(temp, rg.terminals);
-    finalNfa.print(rg.terminals);
+    //finalNfa.print(rg.terminals);
     DFABuilder dfaBuilder;
     DFA dfa = dfaBuilder.basicConstruct(finalNfa);
     MinimizedDFA mDFA(dfa, rg.terminals);
     ProgramReader pr("..//program sample 1.txt",mDFA);
     vector<Token> tokens = pr.getTokens();
     for (int i = 0; i < tokens.size(); ++i) {
-        cout << tokens[i].value << endl;
+        cout << tokens[i].type << " : " << tokens[i].value << endl;
     }
     return 0;
 }
