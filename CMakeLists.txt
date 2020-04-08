@@ -10,7 +10,6 @@ add_executable(Compiler
         LexicalAnalyzer/DFA.h
         LexicalAnalyzer/DFABuilder.cpp
         LexicalAnalyzer/DFABuilder.h
-        LexicalAnalyzer/DFAState.cpp
         LexicalAnalyzer/DFAState.h
         LexicalAnalyzer/FinalNFA.cpp
         LexicalAnalyzer/FinalNFA.h

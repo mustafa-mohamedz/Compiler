@@ -12,12 +12,10 @@ using namespace std;
 
 class DFAState {
 public:
-    enum Type {
-        start, accept, internal
-    } type;
+    bool is_accept;
     int id;
-    std::vector<State> NFAStates;
-    map<Symbol, std::vector<State>> transitions;
+    std::vector<int> NFAStates;
+    map<Symbol, std::vector<int>> transitions;
     map<Symbol, int> DFATransitions;
     Production accepted_production;
     bool operator<(const DFAState &x) const {
@@ -26,9 +24,8 @@ public:
     bool operator == (const DFAState &x) const {
         return x.id == id;
     }
-    DFAState(Type type, int n, map<Symbol, std::vector<State>> t);
 
-    DFAState() {};
+    DFAState() {is_accept = false;};
 };
 
 #endif //COMPILER_DFASTATE_H

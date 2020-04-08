@@ -14,11 +14,11 @@ class DFABuilder {
 public:
     DFA basicConstruct(FinalNFA nonDeterministicAutomata);
 
-    vector<State> LClosure(State state);
+    vector<int> LClosure(int state);
 
-    DFAState build_DFA_state(vector<State> vector);
+    DFAState build_DFA_state(vector<int> vector);
 
-    vector<State> LClosureVec(vector<State> vector);
+    vector<int> LClosureVec(vector<int> vector);
 };
 
 #endif //COMPILER_DFABUILDER_H
