@@ -127,6 +127,7 @@ void MinimizedDFA::convertPartitionsToDFA(const vector<set<DFAState>> &partition
 void MinimizedDFA::printDFA(const set<Symbol> &alphabet) {
     vector<MinimizedState> accept_states;
     cout << "Start State: " << this->startState << endl;
+    MyFile << "Start State: " << this->startState << endl;
     cout << "  State  |";
     MyFile << "  State  |";
     for (const auto s : alphabet) {

@@ -27,4 +27,4 @@ add_executable(Compiler
         LexicalAnalyzer/RegularGrammar.h
         LexicalAnalyzer/State.cpp
         LexicalAnalyzer/State.h
-        main.cpp)
+        main.cpp LexicalAnalyzer.cpp LexicalAnalyzer.h)

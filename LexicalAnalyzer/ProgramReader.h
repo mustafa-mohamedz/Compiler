@@ -22,7 +22,7 @@ class ProgramReader {
 private:
     vector<Token>::size_type tokenIndex;
     vector<Token> tokenList;
-    vector<string> messageList;
+    vector<string> logList; //list of accepted tokens and error messages
     /**
       * convert string without spaces to vector of tokens
       * @param stringBlock string without spaces to be divided into tokens
@@ -37,10 +37,11 @@ public:
      * @param dfa the deterministic finite automate used to tokenize the input program
      */
     ProgramReader(const string &programPath, const MinimizedDFA &dfa);
-    vector<string> getMessages();
+    vector<string> getLogMessages();
     vector<Token> getTokens();
     bool hasNextToken();
     Token getNextToken();
+    ProgramReader(){};
 };
 
 
