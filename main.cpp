@@ -1,11 +1,13 @@
-#include <InputParser.h>
-#include <DFABuilder.h>
-#include "LexicalAnalyzer/ProgramReader.h"
+
 #include <time.h>
+#include "LexicalAnalyzer.h"
+#include "SyntaxParser.h"
 
 using namespace std;
 
 int main() {
+    LexicalAnalyzer lexicalAnalyzer("..//input sample 1.txt" , "..//program sample 1.txt");
+    SyntaxParser syntax_parser(lexicalAnalyzer," ");
 // phase1 main
 //    std::cout << "starting!!" << std::endl;
 //    clock_t start = clock();

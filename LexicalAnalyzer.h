@@ -3,13 +3,13 @@
 
 #include <InputParser.h>
 #include <DFABuilder.h>
-#include "LexicalAnalyzer/ProgramReader.h"
+#include "LexicalAnalyzerGenerator/ProgramReader.h"
 
 class LexicalAnalyzer {
 private:
     ProgramReader pr;
 public:
-    LexicalAnalyzer(const string& input_program_path, const string& lexical_rules_path);
+    LexicalAnalyzer(const string& lexical_rules_path , const string& input_program_path);
     vector<string> getLogMessages();
     bool hasNextToken();
     Token getNextToken();

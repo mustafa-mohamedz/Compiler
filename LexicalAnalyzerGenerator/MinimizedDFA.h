@@ -13,7 +13,7 @@ class MinimizedState {
 public:
     bool is_accept;
     int id;
-    unordered_map<Symbol, int, SymbolHashFunction> transitions;
+    unordered_map<Symbol, int, SymbolHF> transitions;
     Production accepted_production;
 
     bool operator<(const DFAState &x) const {

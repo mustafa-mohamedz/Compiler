@@ -9,44 +9,7 @@
 #include <fstream>
 #include <algorithm>
 #include <regex>
-using namespace std;
-
-
-
-
-enum Type {
-    terminal, nonTerminal, special
-};
-
-class Symbol {
-
-public:
-    Symbol(Type t, string v) {
-        value = v;
-        type = t;
-    }
-
-    Symbol() {
-    }
-
-    bool operator<(const Symbol &x) const {
-        return value < x.value || (x.value == value && type < x.type);
-    }
-
-    bool operator ==(const Symbol &x) const {
-        return x.value == value && type == x.type;
-    }
-    Type type;
-    std::string value;
-};
-
-class SymbolHashFunction {
-public:
-    size_t operator()(const Symbol& s) const{
-        string str = to_string(s.type) + s.value;
-        return (hash<string>()(str));
-    }
-};
+#include "Symbol.h"
 
 class Production {
 public:

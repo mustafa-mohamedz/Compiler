@@ -102,7 +102,7 @@ void MinimizedDFA::convertPartitionsToDFA(const vector<set<DFAState>> &partition
         } else {
             ithState.is_accept = false;
         }
-        unordered_map<Symbol, int, SymbolHashFunction> ithStateTransitions;
+        unordered_map<Symbol, int, SymbolHF> ithStateTransitions;
         for (auto transition : sampleState.DFATransitions) {
             ithStateTransitions.insert({transition.first, stateToPartitionMap.find(transition.second)->second});
         }
