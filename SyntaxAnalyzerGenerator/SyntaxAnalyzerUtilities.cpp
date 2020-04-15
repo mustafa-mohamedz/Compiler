@@ -61,10 +61,30 @@ unordered_set<Symbol, SymbolHF> SyntaxAnalyzerUtilities::compute_first_set_of(co
 
 unordered_set<Symbol, SymbolHF> SyntaxAnalyzerUtilities::compute_follow_set_of(const Symbol& symbol) {
     unordered_set<Symbol, SymbolHF> result;
+    if(symbol == contextFreeGrammar.productions[0].LHS){
+        result.insert(Symbol(special,"$"));
+    }
     for (int i = 0; i < contextFreeGrammar.productions.size(); ++i) {
         for (int j = 0; j < contextFreeGrammar.productions[i].RHS.size(); ++j) {
             for (int k = 0; k < contextFreeGrammar.productions[i].RHS[j].size(); ++k) {
-                if()
+                if(contextFreeGrammar.productions[i].RHS[j][k] == symbol){
+                    if(k == contextFreeGrammar.productions[i].RHS[j].size() - 1){
+                        if(!(contextFreeGrammar.productions[i].LHS == symbol)){
+                            auto temp = get_follow_set_of(contextFreeGrammar.productions[i].LHS);
+                            result.insert(temp.begin(),temp.end());
+                        }
+                    }else{
+                        vector<Symbol> rest_of_production(contextFreeGrammar.productions[i].RHS[j].begin()+k+1,contextFreeGrammar.productions[i].RHS[j].end());
+                        auto temp = get_first_set_of(rest_of_production);
+                        Symbol epsilon(special,"L");
+                        if(temp.find(epsilon) != temp.end()){
+                            temp.erase(epsilon);
+                            auto x = get_follow_set_of(contextFreeGrammar.productions[i].LHS);
+                            temp.insert(x.begin(),x.end());
+                        }
+                        result.insert(temp.begin(),temp.end());
+                    }
+                }
             }
         }
     }
@@ -75,4 +95,14 @@ void SyntaxAnalyzerUtilities::fill_index_of_symbol_map() {
     for (int i = 0; i < contextFreeGrammar.productions.size(); ++i) {
         index_of_symbol_map.insert({contextFreeGrammar.productions[i].LHS,i});
     }
+}
+
+unordered_set<Symbol, SymbolHF> SyntaxAnalyzerUtilities::get_follow_set_of(Symbol non_terminal) {
+    unordered_set<Symbol, SymbolHF> result;
+    if(follow_set_map.find(non_terminal) != follow_set_map.end()){
+        result = follow_set_map.find(non_terminal)->second;
+    }else{
+        result = compute_follow_set_of(non_terminal);
+    }
+    return result;
 }
