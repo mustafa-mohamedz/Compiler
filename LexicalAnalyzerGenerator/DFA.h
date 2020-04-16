@@ -8,8 +8,7 @@ class DFA {
 public:
     DFA();
 
-    DFAState start_state;
-    std::vector<DFAState> accept_states;
+    int start_state_id;
     std::vector<DFAState> states;
     //constructor
     DFA(FinalNFA nonDeterministicAutomata);

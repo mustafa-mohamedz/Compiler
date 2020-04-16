@@ -203,10 +203,3 @@ bool RegularGrammar::isConcatenationLHS(const Symbol& x){
 bool RegularGrammar::isConcatenationRHS(const Symbol& x){
     return (x.type == special && (x.value == "(" || x.value == "L"))||x.type == terminal;
 }
-//void RegularGrammar::clearSpecialSymbolsFromTerminals() {
-//    for(auto f : terminals) {
-//        if(f.type == special){
-//            terminals.erase(f);
-//        }
-//    }
-//}

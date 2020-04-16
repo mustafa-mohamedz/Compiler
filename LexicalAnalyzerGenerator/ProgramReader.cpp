@@ -35,7 +35,7 @@ vector<Token> ProgramReader::processStringBlock(const std::string &stringBlock, 
         }
         //get the maximal munch
         int numOfUndoChars = 0;
-        while(! history.empty() && dfa.states[history.top()].type != MinimizedState::accept){
+        while(! history.empty() && !dfa.states[history.top()].is_accept){
             history.pop();
             numOfUndoChars++;
         }
@@ -53,7 +53,7 @@ vector<Token> ProgramReader::processStringBlock(const std::string &stringBlock, 
             result.push_back(Token(acceptedProduction.LHS.value,stringBlock.substr(currentStart,nextStart - currentStart)));
             message = acceptedProduction.LHS.value + " : " + stringBlock.substr(currentStart,nextStart - currentStart) + "\n";
         }
-        messageList.push_back(message);
+        logList.push_back(message);
         currentStart = nextStart;
     }
     return result;
@@ -74,6 +74,6 @@ Token ProgramReader::getNextToken() {
     return this->tokenList[this->tokenIndex++];
 }
 
-vector<string> ProgramReader::getMessages() {
-    return messageList;
+vector<string> ProgramReader::getLogMessages() {
+    return logList;
 }

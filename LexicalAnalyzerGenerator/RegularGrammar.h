@@ -9,33 +9,7 @@
 #include <fstream>
 #include <algorithm>
 #include <regex>
-using namespace std;
-
-
-
-
-enum Type {
-    terminal, nonTerminal, special
-};
-
-class Symbol {
-
-public:
-    Symbol(Type t, string v) {
-        value = v;
-        type = t;
-    }
-
-    Symbol() {
-    }
-
-    bool operator<(const Symbol &x) const {
-        return value < x.value || (x.value == value && type < x.type);
-    }
-
-    Type type;
-    std::string value;
-};
+#include "Symbol.h"
 
 class Production {
 public:
@@ -68,10 +42,11 @@ private:
     vector<Symbol> processSpecial(const string &, int &);
 
     vector<Symbol> substituteRange(const string &, int &);
-    void clearSpecialSymbolsFromTerminals();
     bool isConcatenationRHS(const Symbol &x);
 
     bool isConcatenationLHS(const Symbol &x);
+
+    void specifyConcatenation();
 
     set<Symbol> nonTerminals; //set contains all non-terminals in the grammar
     std::map<Symbol, std::vector<Symbol>> regularDefinition;
@@ -91,11 +66,6 @@ public:
     //constructor
     RegularGrammar(const std::string &rulesPath);
     RegularGrammar();
-
-    void specifyConcatenation();
-
-
-
 };
 static inline void ltrim(std::string &s) {
     s.erase(s.begin(), std::find_if(s.begin(), s.end(), [](int ch) {

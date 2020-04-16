@@ -3,29 +3,28 @@ project(Compiler)
 
 set(CMAKE_CXX_STANDARD 14)
 
-include_directories(LexicalAnalyzer)
+include_directories(LexicalAnalyzerGenerator)
 
 add_executable(Compiler
-        LexicalAnalyzer/DFA.cpp
-        LexicalAnalyzer/DFA.h
-        LexicalAnalyzer/DFABuilder.cpp
-        LexicalAnalyzer/DFABuilder.h
-        LexicalAnalyzer/DFAState.cpp
-        LexicalAnalyzer/DFAState.h
-        LexicalAnalyzer/FinalNFA.cpp
-        LexicalAnalyzer/FinalNFA.h
-        LexicalAnalyzer/InputParser.cpp
-        LexicalAnalyzer/InputParser.h
-        LexicalAnalyzer/MinimizedDFA.cpp
-        LexicalAnalyzer/MinimizedDFA.h
-        LexicalAnalyzer/NFA.cpp
-        LexicalAnalyzer/NFA.h
-        LexicalAnalyzer/NFABuilder.cpp
-        LexicalAnalyzer/NFABuilder.h
-        LexicalAnalyzer/ProgramReader.cpp
-        LexicalAnalyzer/ProgramReader.h
-        LexicalAnalyzer/RegularGrammar.cpp
-        LexicalAnalyzer/RegularGrammar.h
-        LexicalAnalyzer/State.cpp
-        LexicalAnalyzer/State.h
-        main.cpp)
+        LexicalAnalyzerGenerator/DFA.cpp
+        LexicalAnalyzerGenerator/DFA.h
+        LexicalAnalyzerGenerator/DFABuilder.cpp
+        LexicalAnalyzerGenerator/DFABuilder.h
+        LexicalAnalyzerGenerator/DFAState.h
+        LexicalAnalyzerGenerator/FinalNFA.cpp
+        LexicalAnalyzerGenerator/FinalNFA.h
+        LexicalAnalyzerGenerator/InputParser.cpp
+        LexicalAnalyzerGenerator/InputParser.h
+        LexicalAnalyzerGenerator/MinimizedDFA.cpp
+        LexicalAnalyzerGenerator/MinimizedDFA.h
+        LexicalAnalyzerGenerator/NFA.cpp
+        LexicalAnalyzerGenerator/NFA.h
+        LexicalAnalyzerGenerator/NFABuilder.cpp
+        LexicalAnalyzerGenerator/NFABuilder.h
+        LexicalAnalyzerGenerator/ProgramReader.cpp
+        LexicalAnalyzerGenerator/ProgramReader.h
+        LexicalAnalyzerGenerator/RegularGrammar.cpp
+        LexicalAnalyzerGenerator/RegularGrammar.h
+        LexicalAnalyzerGenerator/State.cpp
+        LexicalAnalyzerGenerator/State.h
+        main.cpp LexicalAnalyzer.cpp LexicalAnalyzer.h SyntaxAnalyzerGenerator/ContextFreeGrammar.cpp SyntaxAnalyzerGenerator/ContextFreeGrammar.h SyntaxAnalyzerGenerator/SyntaxAnalyzerUtilities.cpp SyntaxAnalyzerGenerator/SyntaxAnalyzerUtilities.h SyntaxAnalyzerGenerator/ParserTable.cpp SyntaxAnalyzerGenerator/ParserTable.h SyntaxParser.cpp SyntaxParser.h LexicalAnalyzerGenerator/Symbol.cpp LexicalAnalyzerGenerator/Symbol.h)
