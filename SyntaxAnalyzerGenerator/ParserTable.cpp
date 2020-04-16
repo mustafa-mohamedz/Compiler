@@ -120,27 +120,40 @@ vector<vector<string>> ParserTable::table_to_string() {
     table.push_back(row);
     //table cell
     row.clear();
+    Symbol epsilon(special, "L");
     for (CFProduction prod : cfg.productions) {
         row.push_back(prod.LHS.value);
         for (Symbol terminal : cfg.terminals) {
             EntryType type = get_entry_type(prod.LHS, terminal);
             if (type == production) {
-                row.push_back(symbol_vector_to_string(get_entry(prod.LHS, terminal)));
+                vector<Symbol> cell = get_entry(prod.LHS, terminal);
+                string cell_string = symbol_vector_to_string(cell);
+                if (cell.size() > 0 && cell[0] == epsilon && cell_string == "L") {
+                    row.push_back("{epsilon}");
+                } else {
+                    row.push_back(cell_string);
+                }
             } else if (type == sync) {
-                row.push_back("sync");
+                row.push_back("{sync}");
             } else if (type == error) {
-                row.push_back("error");
+                row.push_back("{error}");
             }
         }
         //$ column
         Symbol input_end(special, "$");
         EntryType type = get_entry_type(prod.LHS, input_end);
         if (type == production) {
-            row.push_back(symbol_vector_to_string(get_entry(prod.LHS, input_end)));
+            vector<Symbol> cell = get_entry(prod.LHS, input_end);
+            string cell_string = symbol_vector_to_string(cell);
+            if (cell.size() > 0 && cell[0] == epsilon && cell_string == "L") {
+                row.push_back("{epsilon}");
+            } else {
+                row.push_back(cell_string);
+            }
         } else if (type == sync) {
-            row.push_back("sync");
+            row.push_back("{sync}");
         } else if (type == error) {
-            row.push_back("error");
+            row.push_back("{error}");
         }
         table.push_back(row);
         row.clear();
