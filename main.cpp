@@ -8,6 +8,31 @@ using namespace std;
 int main() {
     LexicalAnalyzer lexicalAnalyzer("..//input sample 1.txt" , "..//program sample 1.txt");
     SyntaxParser syntax_parser(lexicalAnalyzer," ");
+
+
+/*
+ * code to test syntaxAnalyzerUtilities
+ */
+//    ContextFreeGrammar x;
+//    CFProduction first;
+//    first.LHS = Symbol(nonTerminal,"E");
+//    first.RHS = {{Symbol(nonTerminal,"T"),Symbol(nonTerminal,"E'")}};
+//    CFProduction second;
+//    second.LHS = Symbol(nonTerminal,"E'");
+//    second.RHS = {{Symbol(terminal,"+"),Symbol(nonTerminal,"T"),Symbol(nonTerminal,"E'")},{Symbol(special,"L")}};
+//    CFProduction third;
+//    third.LHS = Symbol(nonTerminal,"T");
+//    third.RHS = {{Symbol(nonTerminal,"F"),Symbol(nonTerminal,"T'")}};
+//    CFProduction fourth;
+//    fourth.LHS = Symbol(nonTerminal,"T'");
+//    fourth.RHS = {{Symbol(terminal,"*"),Symbol(nonTerminal,"F"),Symbol(nonTerminal,"T'")},{Symbol(special,"L")}};
+//    CFProduction fifth;
+//    fifth.LHS = Symbol(nonTerminal,"F");
+//    fifth.RHS = {{Symbol(terminal,"("),Symbol(nonTerminal,"E"),Symbol(terminal,")")},{Symbol(terminal,"id")}};
+//    x.productions = {first,second,third,fourth,fifth};
+//    SyntaxAnalyzerUtilities s(x);
+
+
 // phase1 main
 //    std::cout << "starting!!" << std::endl;
 //    clock_t start = clock();
