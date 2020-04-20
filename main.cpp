@@ -19,12 +19,12 @@ int main() {
     second.LHS = Symbol(nonTerminal,"A");
     second.RHS = {{Symbol(nonTerminal,"A"),Symbol(terminal,"c")},{Symbol(nonTerminal,"S"), Symbol(terminal,"d")},
                   {Symbol(terminal,"f")}};
-    x.productions = {first,second};
+    x.productions = {first, second};
 
     LL1GrammerConstructor l(x);
 
-    l.eliminate_left_recuresion();
-
+    ContextFreeGrammar grammar = l.eliminate_left_recursion();
+    cout << "";
 
 /*
  * code to test syntaxAnalyzerUtilities

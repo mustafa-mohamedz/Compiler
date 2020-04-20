@@ -11,10 +11,11 @@
 class LL1GrammerConstructor {
 private:
     ContextFreeGrammar input_grammer;
-    void eliminate_immediate_left_recuresion(int position);
+    ContextFreeGrammar LL1_grammer;
+    void eliminate_immediate_left_recursion(int position);
 public:
     LL1GrammerConstructor(ContextFreeGrammar input);
-    void eliminate_left_recuresion();
+    ContextFreeGrammar eliminate_left_recursion();
     LL1GrammerConstructor(){};
 };
 
