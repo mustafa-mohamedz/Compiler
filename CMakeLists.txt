@@ -27,4 +27,4 @@ add_executable(Compiler
         LexicalAnalyzerGenerator/RegularGrammar.h
         LexicalAnalyzerGenerator/State.cpp
         LexicalAnalyzerGenerator/State.h
-        main.cpp LexicalAnalyzer.cpp LexicalAnalyzer.h SyntaxAnalyzerGenerator/ContextFreeGrammar.cpp SyntaxAnalyzerGenerator/ContextFreeGrammar.h SyntaxAnalyzerGenerator/SyntaxAnalyzerUtilities.cpp SyntaxAnalyzerGenerator/SyntaxAnalyzerUtilities.h SyntaxAnalyzerGenerator/ParserTable.cpp SyntaxAnalyzerGenerator/ParserTable.h SyntaxParser.cpp SyntaxParser.h LexicalAnalyzerGenerator/Symbol.cpp LexicalAnalyzerGenerator/Symbol.h)
+        main.cpp LexicalAnalyzer.cpp LexicalAnalyzer.h SyntaxAnalyzerGenerator/ContextFreeGrammar.cpp SyntaxAnalyzerGenerator/ContextFreeGrammar.h SyntaxAnalyzerGenerator/SyntaxAnalyzerUtilities.cpp SyntaxAnalyzerGenerator/SyntaxAnalyzerUtilities.h SyntaxAnalyzerGenerator/ParserTable.cpp SyntaxAnalyzerGenerator/ParserTable.h SyntaxParser.cpp SyntaxParser.h LexicalAnalyzerGenerator/Symbol.cpp LexicalAnalyzerGenerator/Symbol.h SyntaxAnalyzerGenerator/LL1GrammerConstructor.cpp SyntaxAnalyzerGenerator/LL1GrammerConstructor.h)

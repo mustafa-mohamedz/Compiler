@@ -2,6 +2,7 @@
 #include <fstream>
 #include <iomanip>
 #include "ParserTable.h"
+using namespace std;
 
 ParserTable::ParserTable(const ContextFreeGrammar &contextFreeGrammar) {
     this->cfg = contextFreeGrammar;
@@ -164,7 +165,7 @@ vector<vector<string>> ParserTable::table_to_string() {
 vector<int> ParserTable::get_entries_widths(const vector<vector<string>> &table) {
     vector<int> width_list;
     for (int j = 0; j < table[0].size(); ++j) {
-        unsigned int max_length = 0;
+        unsigned long long max_length = 0;
         for (int i = 0; i < table.size(); ++i) {
             max_length = max(max_length, table[i][j].size());
         }

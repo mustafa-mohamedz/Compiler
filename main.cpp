@@ -2,12 +2,28 @@
 #include <time.h>
 #include "LexicalAnalyzer.h"
 #include "SyntaxParser.h"
+#include "SyntaxAnalyzerGenerator/LL1GrammerConstructor.h"
 
 using namespace std;
 
 int main() {
-    LexicalAnalyzer lexicalAnalyzer("..//input sample 1.txt" , "..//program sample 1.txt");
-    SyntaxParser syntax_parser(lexicalAnalyzer," ");
+   // LexicalAnalyzer lexicalAnalyzer("..//input sample 1.txt" , "..//program sample 1.txt");
+   // SyntaxParser syntax_parser(lexicalAnalyzer," ");
+
+    ContextFreeGrammar x;
+
+    CFProduction first;
+    first.LHS = Symbol(nonTerminal,"S");
+    first.RHS = {{Symbol(nonTerminal,"A"),Symbol(terminal,"a")},{Symbol(terminal,"b")}};
+    CFProduction second;
+    second.LHS = Symbol(nonTerminal,"A");
+    second.RHS = {{Symbol(nonTerminal,"A"),Symbol(terminal,"c")},{Symbol(nonTerminal,"S"), Symbol(terminal,"d")},
+                  {Symbol(terminal,"f")}};
+    x.productions = {first,second};
+
+    LL1GrammerConstructor l(x);
+
+    l.eliminate_left_recuresion();
 
 
 /*
