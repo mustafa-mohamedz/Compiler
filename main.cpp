@@ -2,7 +2,7 @@
 #include <time.h>
 #include "LexicalAnalyzer.h"
 #include "SyntaxParser.h"
-#include "SyntaxAnalyzerGenerator/LL1GrammerConstructor.h"
+#include "SyntaxAnalyzerGenerator/LL1GrammarConstructor.h"
 
 using namespace std;
 
@@ -13,17 +13,30 @@ int main() {
     ContextFreeGrammar x;
 
     CFProduction first;
-    first.LHS = Symbol(nonTerminal,"S");
-    first.RHS = {{Symbol(nonTerminal,"A"),Symbol(terminal,"a")},{Symbol(terminal,"b")}};
+    first.LHS = Symbol(nonTerminal,"A");
+    first.RHS = {{Symbol(terminal,"a"),Symbol(terminal,"b"),Symbol(nonTerminal,"B")},
+                 {Symbol(terminal,"a"), Symbol(nonTerminal,"B")},
+                 {Symbol(terminal,"c"), Symbol(terminal,"d"), Symbol(terminal,"g")},
+                 {Symbol(terminal,"c"), Symbol(terminal,"d"), Symbol(terminal,"e"), Symbol(nonTerminal,"B")},
+                 {Symbol(terminal,"c"), Symbol(terminal,"d"), Symbol(terminal,"f"), Symbol(nonTerminal,"B")}};
     CFProduction second;
-    second.LHS = Symbol(nonTerminal,"A");
-    second.RHS = {{Symbol(nonTerminal,"A"),Symbol(terminal,"c")},{Symbol(nonTerminal,"S"), Symbol(terminal,"d")},
-                  {Symbol(terminal,"f")}};
+    second.LHS = Symbol(nonTerminal,"B");
+    second.RHS = {{Symbol(terminal,"a"),Symbol(terminal,"d")},{Symbol(terminal,"a")},
+                  {Symbol(terminal,"a"),Symbol(terminal,"b"), Symbol(terminal,"c")},
+                  {Symbol(terminal,"b")}};
+
+    CFProduction third;
+    third.LHS = Symbol(nonTerminal,"A");
+    third.RHS = {{Symbol(terminal,"a")},{Symbol(terminal,"a"), Symbol(terminal,"b")},
+                 {Symbol(terminal,"a"), Symbol(terminal,"b"), Symbol(terminal,"c")}};
+
     x.productions = {first, second};
 
-    LL1GrammerConstructor l(x);
+    LL1GrammarConstructor l(x);
 
-    ContextFreeGrammar grammar = l.eliminate_left_recursion();
+    ContextFreeGrammar grammar = l.left_factor();
+
+//    ContextFreeGrammar grammar = l.eliminate_left_recursion();
     cout << "";
 
 /*
