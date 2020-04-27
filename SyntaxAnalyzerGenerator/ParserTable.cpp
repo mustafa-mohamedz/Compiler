@@ -12,6 +12,7 @@ ParserTable::ParserTable(const ContextFreeGrammar &contextFreeGrammar) {
         this->production_entries.insert({production_list[i].LHS, build_production_row(i, util)});
         this->sync_entries.insert({production_list[i].LHS, build_sync_row(i, util)});
     }
+    print();
 }
 
 unordered_map<Symbol, pair<int, int>, SymbolHF>
@@ -27,7 +28,6 @@ ParserTable::build_production_row(int production_index, SyntaxAnalyzerUtilities 
             auto follow_set = util.get_follow_set_of(prod.LHS);
             for (const Symbol &terminal : follow_set) {
                 if (production_row.find(terminal) != production_row.end()) {
-                    cout << "ambiguous grammar !!" << endl;
                     cout << "ambiguous grammar !!" << endl;
                 } else {
                     production_row.insert({terminal, {production_index, i}});
