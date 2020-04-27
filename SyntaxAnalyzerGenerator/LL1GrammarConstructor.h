@@ -15,7 +15,7 @@ private:
     string find_longest_prefix(vector<int>);
     void eliminate_immediate_left_recursion(int position);
 public:
-    LL1GrammarConstructor(ContextFreeGrammar input);
+    LL1GrammarConstructor(const string &rulesPath);
     ContextFreeGrammar eliminate_left_recursion();
     ContextFreeGrammar left_factor();
     LL1GrammarConstructor(){};

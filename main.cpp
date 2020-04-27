@@ -10,33 +10,11 @@ int main() {
    // LexicalAnalyzer lexicalAnalyzer("..//input sample 1.txt" , "..//program sample 1.txt");
    // SyntaxParser syntax_parser(lexicalAnalyzer," ");
 
-    ContextFreeGrammar x;
-
-    CFProduction first;
-    first.LHS = Symbol(nonTerminal,"A");
-    first.RHS = {{Symbol(terminal,"a"),Symbol(terminal,"b"),Symbol(nonTerminal,"B")},
-                 {Symbol(terminal,"a"), Symbol(nonTerminal,"B")},
-                 {Symbol(terminal,"c"), Symbol(terminal,"d"), Symbol(terminal,"g")},
-                 {Symbol(terminal,"c"), Symbol(terminal,"d"), Symbol(terminal,"e"), Symbol(nonTerminal,"B")},
-                 {Symbol(terminal,"c"), Symbol(terminal,"d"), Symbol(terminal,"f"), Symbol(nonTerminal,"B")}};
-    CFProduction second;
-    second.LHS = Symbol(nonTerminal,"B");
-    second.RHS = {{Symbol(terminal,"a"),Symbol(terminal,"d")},{Symbol(terminal,"a")},
-                  {Symbol(terminal,"a"),Symbol(terminal,"b"), Symbol(terminal,"c")},
-                  {Symbol(terminal,"b")}};
-
-    CFProduction third;
-    third.LHS = Symbol(nonTerminal,"A");
-    third.RHS = {{Symbol(terminal,"a")},{Symbol(terminal,"a"), Symbol(terminal,"b")},
-                 {Symbol(terminal,"a"), Symbol(terminal,"b"), Symbol(terminal,"c")}};
-
-    x.productions = {first, second};
-
-    LL1GrammarConstructor l(x);
+    LL1GrammarConstructor l("../inputGrammar.txt");
 
     ContextFreeGrammar grammar = l.left_factor();
 
-//    ContextFreeGrammar grammar = l.eliminate_left_recursion();
+    ContextFreeGrammar grammar1 = l.eliminate_left_recursion();
     cout << "";
 
 /*

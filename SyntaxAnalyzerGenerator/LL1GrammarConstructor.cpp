@@ -5,16 +5,141 @@
 #include "LL1GrammarConstructor.h"
 #include <iostream>
 #include <map>
+#include <fstream>
+#include <string>
+#include <sstream>
 
 using namespace std;
+
 int counter = 0;
-LL1GrammarConstructor::LL1GrammarConstructor(ContextFreeGrammar input){
-    this->input_grammer = input;
-    this->LL1_grammer.terminals = this->input_grammer.terminals;
+LL1GrammarConstructor::LL1GrammarConstructor(const string &rulesPath){
+    ContextFreeGrammar contextFreeGrammar;
+    vector<CFProduction> productions;
+    unordered_set<Symbol,SymbolHF> terminals;
+
+    string line;
+    ifstream rulesFile(rulesPath);
+    vector<string> all_productions;
+    string str((std::istreambuf_iterator<char>(rulesFile)),
+               std::istreambuf_iterator<char>());
+    rulesFile.close();
+
+    string delimiter = "# ";
+    size_t pos = 0;
+    std::string token;
+    while ((pos = str.find(delimiter)) != std::string::npos) {
+        token = str.substr(0, pos);
+        all_productions.push_back(token);
+        str.erase(0, pos + delimiter.length());
+    }
+    all_productions.erase(all_productions.begin());
+    all_productions.push_back(str);
+
+    map<string, vector<string>> initial_productions;
+    vector<string> lhss;
+    vector<vector<string>> rhss;
+    string delimiter1 = " = ";
+    for (int i = 0; i < all_productions.size(); ++i) {
+        size_t pos = 0;
+        pos = all_productions[i].find(delimiter1);
+        token = all_productions[i].substr(0, pos);
+        all_productions[i].erase(0, pos + delimiter1.length());
+        //erase new line
+        string del = "\n";
+        size_t po = 0;
+        while ((po = all_productions[i].find(del)) != std::string::npos) {
+            po = all_productions[i].find(del);
+            all_productions[i].erase(po, 1);
+        }
+        //values
+        vector<string> p;
+        string delimiter = "|";
+        size_t pos1 = 0;
+        std::string token1;
+        bool single = true;
+        while ((pos1 = all_productions[i].find(delimiter)) != std::string::npos) {
+            single = false;
+            token1 = all_productions[i].substr(0, pos1);
+            if(token1 != "") p.push_back(token1);
+            all_productions[i].erase(0, pos1 + delimiter.length());
+        }
+        p.push_back(all_productions[i]);
+        initial_productions.insert({token, p});
+        lhss.push_back(token);
+        rhss.push_back(p);
+    }
+
+    vector<CFProduction> ordered_grammar;
+    for (int j = 0; j < lhss.size(); ++j) {
+        CFProduction rule;
+        Symbol lhs(nonTerminal, lhss[j]);
+        rule.LHS = lhs;
+        vector<vector<Symbol>> rhs;
+
+        for (int i = 0; i < rhss[j].size(); ++i) {
+            int found = 0;
+            string s = rhss[j][i];
+            vector<Symbol> production;
+            int counter = 0;
+            int size = s.size();
+            while (counter < size) {
+                char c = s[0];
+                if (c == ' ') {
+                    s.erase(0, 1);
+                    counter++;
+                }
+                else if (c == '\''){
+                    size_t p;
+                    p = s.find("'", 1);
+                    s.erase(0, 1);
+                    //terminal
+                    string temp = s.substr(0, p-1);
+                    s.erase(0,temp.size() + 1);
+                    counter += (temp.size() + 2);
+                    Symbol pp(terminal, temp);
+                    production.push_back(pp);
+                    terminals.insert(pp);
+                } else{
+                    size_t p = s.find("'", 0);
+                    if(p != std::string::npos){
+                        string temp = s.substr(0, p-1);
+                        s.erase(0,temp.size());
+                        counter += (temp.size());
+                        Symbol pp(nonTerminal, temp);
+                        production.push_back(pp);
+                    }
+                    else {
+                        size_t p = s.find(" ", 0);
+                        if(p != std::string::npos) {
+                            string temp = s.substr(0, p);
+                            s.erase(0, temp.size() + 1);
+                            counter += (temp.size() + 1);
+                            Symbol pp(nonTerminal, temp);
+                            production.push_back(pp);
+                        }
+                        else{
+                            string temp = s.substr(0, s.size());
+                            counter += (temp.size());
+                            Symbol pp(nonTerminal, temp);
+                            production.push_back(pp);
+                        }
+                    }
+
+                }
+            }
+            rhs.push_back(production);
+        }
+        rule.RHS = rhs;
+        productions.push_back(rule);
+        ordered_grammar.push_back(rule);
+    }
+    this->LL1_grammer.terminals = terminals;
+    this->LL1_grammer.productions = productions;
 }
 
 ContextFreeGrammar LL1GrammarConstructor::eliminate_left_recursion() {
-    LL1_grammer.terminals = input_grammer.terminals;
+    input_grammer = LL1_grammer;
+    LL1_grammer.productions.clear();
     for (int i = 0; i < input_grammer.productions.size(); ++i){
         CFProduction current_p = input_grammer.productions[i];
         for (int j = 0; j < i; ++j) {
@@ -93,8 +218,6 @@ void LL1GrammarConstructor::eliminate_immediate_left_recursion(int position) {
 }
 
 ContextFreeGrammar LL1GrammarConstructor::left_factor() {
-    LL1_grammer = input_grammer;
-
     for (int i = 0; i < LL1_grammer.productions.size(); ++i) {
         counter = 0;
         string temp_LHS = LL1_grammer.productions[i].LHS.value + "'";
