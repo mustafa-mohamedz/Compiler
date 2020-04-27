@@ -26,7 +26,7 @@ class ContextFreeGrammar {
 public:
     ContextFreeGrammar(const string &CFG_path);
     ContextFreeGrammar(){};
-
+    void print();
     unordered_set<Symbol,SymbolHF> terminals;
     //startSymbol's production is productions[0]
     vector<CFProduction> productions;
