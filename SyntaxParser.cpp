@@ -6,8 +6,9 @@
 
 SyntaxParser::SyntaxParser(const LexicalAnalyzer &lexicalAnalyzer, const string &CFG_path) {
     LL1GrammarConstructor l(CFG_path);
-    l.left_factor();
-    ContextFreeGrammar grammar = l.eliminate_left_recursion();
+    l.eliminate_left_recursion();
+    ContextFreeGrammar grammar = l.left_factor();
+    grammar.print();
     ParserTable table(grammar);
     vector<string> output = LLParser::get_output(grammar, table, lexicalAnalyzer);
     for (int i = 0; i < output.size(); ++i) {

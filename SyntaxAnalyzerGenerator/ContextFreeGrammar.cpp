@@ -15,7 +15,7 @@ void ContextFreeGrammar::print() {
         cout << productions[i].LHS.value << " --> ";
         for (int j = 0; j < productions[i].RHS.size(); ++j) {
             for (int k = 0; k < productions[i].RHS[j].size(); ++k) {
-                cout << productions[i].RHS[j][k].value;
+                cout << productions[i].RHS[j][k].value << " ";
             }
             cout << " | ";
         }
