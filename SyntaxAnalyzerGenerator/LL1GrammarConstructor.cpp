@@ -91,6 +91,7 @@ LL1GrammarConstructor::LL1GrammarConstructor(const string &rulesPath){
                     Symbol pp(special, "L");
                     production.push_back(pp);
                     terminals.insert(pp);
+                    break;
                 }else if (c == '\''){
                     size_t p;
                     p = s.find("'", 1);

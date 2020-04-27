@@ -1,7 +1,7 @@
 Start State: 0
   State  |  a   |  b   |  c   |  d   |  e   |
 ----------------------------------------
-     0   | (4)  | (5)  | (3)  | (2)  | (1)  |
+     0   | (3)  | (5)  | (2)  | (4)  | (1)  |
 ----------------------------------------
     (1)  |  e   |  e   |  e   |  e   |  e   |
 ----------------------------------------
@@ -15,7 +15,7 @@ Start State: 0
 ----------------------------------------
    Accepted Productions:
    State 1 accepts the production: e
-   State 2 accepts the production: d
-   State 3 accepts the production: c
-   State 4 accepts the production: a
+   State 2 accepts the production: c
+   State 3 accepts the production: a
+   State 4 accepts the production: d
    State 5 accepts the production: b
