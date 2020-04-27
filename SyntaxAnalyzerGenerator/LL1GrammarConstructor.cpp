@@ -12,10 +12,11 @@
 using namespace std;
 
 int counter = 0;
-LL1GrammarConstructor::LL1GrammarConstructor(const string &rulesPath){
+
+LL1GrammarConstructor::LL1GrammarConstructor(const string &rulesPath) {
     ContextFreeGrammar contextFreeGrammar;
     vector<CFProduction> productions;
-    unordered_set<Symbol,SymbolHF> terminals;
+    unordered_set<Symbol, SymbolHF> terminals;
 
     string line;
     ifstream rulesFile(rulesPath);
@@ -60,7 +61,7 @@ LL1GrammarConstructor::LL1GrammarConstructor(const string &rulesPath){
         while ((pos1 = all_productions[i].find(delimiter)) != std::string::npos) {
             single = false;
             token1 = all_productions[i].substr(0, pos1);
-            if(token1 != "") p.push_back(token1);
+            if (token1 != "") p.push_back(token1);
             all_productions[i].erase(0, pos1 + delimiter.length());
         }
         p.push_back(all_productions[i]);
@@ -87,41 +88,39 @@ LL1GrammarConstructor::LL1GrammarConstructor(const string &rulesPath){
                 if (c == ' ') {
                     s.erase(0, 1);
                     counter++;
-                }else if (c == '\\' && s[1] == 'L'){
+                } else if (c == '\\' && s[1] == 'L') {
                     Symbol pp(special, "L");
                     production.push_back(pp);
                     terminals.insert(pp);
                     break;
-                }else if (c == '\''){
+                } else if (c == '\'') {
                     size_t p;
                     p = s.find("'", 1);
                     s.erase(0, 1);
                     //terminal
-                    string temp = s.substr(0, p-1);
-                    s.erase(0,temp.size() + 1);
+                    string temp = s.substr(0, p - 1);
+                    s.erase(0, temp.size() + 1);
                     counter += (temp.size() + 2);
                     Symbol pp(terminal, temp);
                     production.push_back(pp);
                     terminals.insert(pp);
-                } else{
+                } else {
                     size_t p = s.find("'", 0);
-                    if(p != std::string::npos){
-                        string temp = s.substr(0, p-1);
-                        s.erase(0,temp.size());
+                    if (p != std::string::npos) {
+                        string temp = s.substr(0, p - 1);
+                        s.erase(0, temp.size());
                         counter += (temp.size());
                         Symbol pp(nonTerminal, temp);
                         production.push_back(pp);
-                    }
-                    else {
+                    } else {
                         size_t p = s.find(" ", 0);
-                        if(p != std::string::npos) {
+                        if (p != std::string::npos) {
                             string temp = s.substr(0, p);
                             s.erase(0, temp.size() + 1);
                             counter += (temp.size() + 1);
                             Symbol pp(nonTerminal, temp);
                             production.push_back(pp);
-                        }
-                        else{
+                        } else {
                             string temp = s.substr(0, s.size());
                             counter += (temp.size());
                             Symbol pp(nonTerminal, temp);
@@ -144,44 +143,39 @@ LL1GrammarConstructor::LL1GrammarConstructor(const string &rulesPath){
 ContextFreeGrammar LL1GrammarConstructor::eliminate_left_recursion() {
     input_grammer = LL1_grammer;
     LL1_grammer.productions.clear();
-    for (int i = 0; i < input_grammer.productions.size(); ++i){
+    for (int i = 0; i < input_grammer.productions.size(); ++i) {
         CFProduction current_p = input_grammer.productions[i];
         for (int j = 0; j < i; ++j) {
             CFProduction prev_p = input_grammer.productions[j];
             for (int m = 0; m < LL1_grammer.productions.size(); ++m) {
-                if (LL1_grammer.productions[m].LHS.value == prev_p.LHS.value){
+                if (LL1_grammer.productions[m].LHS.value == prev_p.LHS.value) {
                     prev_p = LL1_grammer.productions[m];
                     break;
                 }
             }
             Symbol prev_symbol = prev_p.LHS;
             vector<vector<Symbol>> new_RHS;
-            for (vector<Symbol> p : current_p.RHS){
+            for (vector<Symbol> p : current_p.RHS) {
                 bool found = false;
-                for (int t = 0; t < p.size(); ++t){
-                    Symbol s = p[t];
-                    if (s.value == prev_symbol.value && s.type == prev_symbol.type){
-                        //replace algorithm temp_RHS is filled
-                        for (int g = 0; g < prev_p.RHS.size(); ++g){
-                            vector<Symbol> temp;
-                            //before non terminal
-                            for (int q = 0; q < t; ++q){
-                                temp.push_back(p[q]);
-                            }
-                            //non terminal position
-                            for (int k = 0; k < prev_p.RHS[g].size(); ++k) {
-                                temp.push_back(prev_p.RHS[g][k]);
-                            }
-                            //after non terminal
-                            for (int l = t + 1; l < p.size(); ++l) {
-                                temp.push_back(p[l]);
-                            }
-                            new_RHS.push_back(temp);
+                Symbol s = p[0];
+                if (s.value == prev_symbol.value && s.type == prev_symbol.type) {
+                    //replace algorithm temp_RHS is filled
+                    for (int g = 0; g < prev_p.RHS.size(); ++g) {
+                        vector<Symbol> temp;
+                        //non terminal position
+                        for (int k = 0; k < prev_p.RHS[g].size(); ++k) {
+                            temp.push_back(prev_p.RHS[g][k]);
                         }
-                        found = true;
+                        //after non terminal
+                        for (int l = 1; l < p.size(); ++l) {
+                            temp.push_back(p[l]);
+                        }
+                        new_RHS.push_back(temp);
                     }
+                    found = true;
                 }
-                if (!found){
+
+                if (!found) {
                     new_RHS.push_back(p);
                 }
             }
@@ -191,7 +185,7 @@ ContextFreeGrammar LL1GrammarConstructor::eliminate_left_recursion() {
         LL1_grammer.productions.push_back(input_grammer.productions[i]);
         eliminate_immediate_left_recursion(i);
     }
-    return  LL1_grammer;
+    return LL1_grammer;
 }
 
 void LL1GrammarConstructor::eliminate_immediate_left_recursion(int position) {
@@ -200,7 +194,8 @@ void LL1GrammarConstructor::eliminate_immediate_left_recursion(int position) {
     string temp = input_grammer.productions[position].LHS.value + "'";
     bool found = false;
     for (vector<Symbol> v : input_grammer.productions[position].RHS) {
-        if (v[0].type == input_grammer.productions[position].LHS.type && v[0].value == input_grammer.productions[position].LHS.value){
+        if (v[0].type == input_grammer.productions[position].LHS.type &&
+            v[0].value == input_grammer.productions[position].LHS.value) {
             found = true;
             vector<Symbol>::iterator it;
             it = v.begin();
@@ -212,7 +207,7 @@ void LL1GrammarConstructor::eliminate_immediate_left_recursion(int position) {
             without_LL.push_back(v);
         }
     }
-    if (found){
+    if (found) {
         LL1_grammer.productions[LL1_grammer.productions.size() - 1].RHS = without_LL;
         //Create new rule
         with_LL.push_back({Symbol(special, "L")});
@@ -246,7 +241,7 @@ ContextFreeGrammar LL1GrammarConstructor::left_factor() {
             vector<Symbol> common_prefix;
             if (it->second.size() > 1) {
                 for (int n = 0; n < counter; ++n) {
-                        temp_LHS.append("*");
+                    temp_LHS.append("*");
                 }
                 counter++;
                 common_prefix.push_back(it->first);
@@ -279,14 +274,13 @@ ContextFreeGrammar LL1GrammarConstructor::left_factor() {
                         new_p.push_back(current_rule.RHS[partition_indexes[n]][j]);
                         empty = false;
                     }
-                    if (!empty){
+                    if (!empty) {
                         new_RHS.push_back(new_p);
-                    }
-                    else{
+                    } else {
                         add_epsilon = true;
                     }
                 }
-                if (add_epsilon){
+                if (add_epsilon) {
                     new_RHS.push_back({Symbol(special, "L")});
                 }
                 CFProduction new_rule(Symbol(nonTerminal, temp_LHS), new_RHS);
@@ -300,7 +294,7 @@ ContextFreeGrammar LL1GrammarConstructor::left_factor() {
             }
         }
         for (int i1 = 0; i1 < LL1_grammer.productions[i].RHS.size(); ++i1) {
-            if(LL1_grammer.productions[i].RHS[i1].size() == 0){
+            if (LL1_grammer.productions[i].RHS[i1].size() == 0) {
                 vector<vector<Symbol>>::iterator it;
                 it = LL1_grammer.productions[i].RHS.begin() + i1;
                 LL1_grammer.productions[i].RHS.erase(it);

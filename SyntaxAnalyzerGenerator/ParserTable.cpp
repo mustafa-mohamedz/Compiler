@@ -28,7 +28,7 @@ ParserTable::build_production_row(int production_index, SyntaxAnalyzerUtilities 
             auto follow_set = util.get_follow_set_of(prod.LHS);
             for (const Symbol &terminal : follow_set) {
                 if (production_row.find(terminal) != production_row.end()) {
-                    cout << "ambiguous grammar !!" << endl;
+                    throw runtime_error("ambiguous grammar !!");
                 } else {
                     production_row.insert({terminal, {production_index, i}});
                 }
@@ -36,7 +36,7 @@ ParserTable::build_production_row(int production_index, SyntaxAnalyzerUtilities 
         }
         for (const Symbol &terminal : first_set) {//add first
             if (production_row.find(terminal) != production_row.end()) {
-                cout << "ambiguous grammar !!" << endl;
+                throw runtime_error("ambiguous grammar !!");
             } else {
                 production_row.insert({terminal, {production_index, i}});
             }
