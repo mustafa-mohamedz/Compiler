@@ -90,10 +90,14 @@ vector<Symbol> ParserTable::get_entry(const Symbol &non_terminal, const Symbol &
 
 void ParserTable::validate_input(const Symbol &non_terminal, const Symbol &terminal) {
     Symbol end_of_line(special, "$");
-    if (cfg.terminals.find(terminal) == cfg.terminals.end() && !(terminal == end_of_line))
-        throw runtime_error("terminal is not in the grammar");
-    if (production_entries.find(non_terminal) == production_entries.end())
-        throw runtime_error("non_terminal is not in the grammar");
+    if (cfg.terminals.find(terminal) == cfg.terminals.end() && !(terminal == end_of_line)){
+        string error = "terminal: " + terminal.value + " is not in the grammar";
+        throw runtime_error(error);
+    }
+    if (production_entries.find(non_terminal) == production_entries.end()){
+        string error = "non_terminal: " + non_terminal.value + " is not in the grammar";
+        throw runtime_error(error);
+    }
 }
 
 

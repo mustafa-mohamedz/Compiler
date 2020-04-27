@@ -52,20 +52,20 @@ vector<string> LLParser::get_output(ContextFreeGrammar cfg, ParserTable pt, Lexi
                 }
                 res.push_back(curr_line);
             } else if (e_type == error) {
-                res.push_back("Error:(illegal " + curr_symbol.value + ") – discard " + current_input.value);
+                res.push_back("Error:(illegal " + curr_symbol.value + ") - discard " + current_input.value);
                 current_input = Symbol(special, "");
                 s.push_back(curr_symbol);
             } else {
                 // sync
-                res.push_back("Sync:(illegal " + curr_symbol.value + ") – discard " + curr_symbol.value);
+                res.push_back("Sync:(illegal " + curr_symbol.value + ") - discard " + curr_symbol.value);
             }
         }
     }
     if (current_input.type != special || (current_input.value != "" && current_input.value != "$")) {
-        res.push_back("Error: expected end of file – discard " + current_input.value);
+        res.push_back("Error: expected end of file - discard " + current_input.value);
     }
     while (la.hasNextToken()) {
-        res.push_back("Error: expected end of file – discard " + la.getNextToken().value);
+        res.push_back("Error: expected end of file - discard " + la.getNextToken().value);
     }
     return res;
 }
