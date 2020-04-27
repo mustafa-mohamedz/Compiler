@@ -28,6 +28,7 @@ ParserTable::build_production_row(int production_index, SyntaxAnalyzerUtilities 
             for (const Symbol &terminal : follow_set) {
                 if (production_row.find(terminal) != production_row.end()) {
                     cout << "ambiguous grammar !!" << endl;
+                    cout << "ambiguous grammar !!" << endl;
                 } else {
                     production_row.insert({terminal, {production_index, i}});
                 }
@@ -165,9 +166,9 @@ vector<vector<string>> ParserTable::table_to_string() {
 vector<int> ParserTable::get_entries_widths(const vector<vector<string>> &table) {
     vector<int> width_list;
     for (int j = 0; j < table[0].size(); ++j) {
-        unsigned long long max_length = 0;
+        unsigned int max_length = 0;
         for (int i = 0; i < table.size(); ++i) {
-            max_length = max(max_length, table[i][j].size());
+            max_length = max_length > table[i][j].size() ? max_length : table[i][j].size();
         }
         width_list.push_back(max_length);
     }
@@ -184,4 +185,3 @@ string ParserTable::symbol_vector_to_string(const vector<Symbol> &list) {
     }
     return result;
 }
-

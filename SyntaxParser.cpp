@@ -5,6 +5,12 @@
 #include "SyntaxParser.h"
 
 SyntaxParser::SyntaxParser(const LexicalAnalyzer &lexicalAnalyzer, const string &CFG_path) {
-    ContextFreeGrammar cfg(CFG_path);
-//    ParserTable parsing_table(cfg);
+    LL1GrammarConstructor l(CFG_path);
+    l.left_factor();
+    ContextFreeGrammar grammar = l.eliminate_left_recursion();
+    ParserTable table(grammar);
+    vector<string> output = LLParser::get_output(grammar, table, lexicalAnalyzer);
+    for (int i = 0; i < output.size(); ++i) {
+        cout << output[i] << endl;
+    }
 }

@@ -87,8 +87,11 @@ LL1GrammarConstructor::LL1GrammarConstructor(const string &rulesPath){
                 if (c == ' ') {
                     s.erase(0, 1);
                     counter++;
-                }
-                else if (c == '\''){
+                }else if (c == '\\' && s[1] == 'L'){
+                    Symbol pp(special, "L");
+                    production.push_back(pp);
+                    terminals.insert(pp);
+                }else if (c == '\''){
                     size_t p;
                     p = s.find("'", 1);
                     s.erase(0, 1);
@@ -220,7 +223,7 @@ void LL1GrammarConstructor::eliminate_immediate_left_recursion(int position) {
 ContextFreeGrammar LL1GrammarConstructor::left_factor() {
     for (int i = 0; i < LL1_grammer.productions.size(); ++i) {
         counter = 0;
-        string temp_LHS = LL1_grammer.productions[i].LHS.value + "'";
+        string temp_LHS = LL1_grammer.productions[i].LHS.value + "*";
         CFProduction current_rule = LL1_grammer.productions[i];
         int pointer = 0;
         map<Symbol, vector<int>> m;
@@ -242,7 +245,7 @@ ContextFreeGrammar LL1GrammarConstructor::left_factor() {
             vector<Symbol> common_prefix;
             if (it->second.size() > 1) {
                 for (int n = 0; n < counter; ++n) {
-                    temp_LHS.append("'");
+                        temp_LHS.append("*");
                 }
                 counter++;
                 common_prefix.push_back(it->first);

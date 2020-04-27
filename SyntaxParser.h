@@ -7,7 +7,10 @@
 
 
 #include "LexicalAnalyzer.h"
+#include "SyntaxAnalyzerGenerator/LL1GrammarConstructor.h"
 #include "SyntaxAnalyzerGenerator/ParserTable.h"
+#include "SyntaxAnalyzerGenerator/LLParser.h"
+
 class SyntaxParser {
 public:
     SyntaxParser(const LexicalAnalyzer&,const string& CFG_path);
