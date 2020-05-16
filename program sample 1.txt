@@ -1,8 +1,14 @@
-int x;
-x = 5;
-if (x > 2)
-{
- x = 0;
-} else {
- x = 10;
+public class test {
+private int methodName() {
+int  count ;
+while (pass != 10)  {
+pass = pass + 1 ;
+}
+if (mnt <= 0) {
+count = count + 1.234;
+}
+else{
+sum = sum + mnt;
+}
+}
 }

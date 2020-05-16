@@ -105,14 +105,7 @@ LL1GrammarConstructor::LL1GrammarConstructor(const string &rulesPath) {
                     production.push_back(pp);
                     terminals.insert(pp);
                 } else {
-                    size_t p = s.find("'", 0);
-                    if (p != std::string::npos) {
-                        string temp = s.substr(0, p - 1);
-                        s.erase(0, temp.size());
-                        counter += (temp.size());
-                        Symbol pp(nonTerminal, temp);
-                        production.push_back(pp);
-                    } else {
+
                         size_t p = s.find(" ", 0);
                         if (p != std::string::npos) {
                             string temp = s.substr(0, p);
@@ -126,7 +119,7 @@ LL1GrammarConstructor::LL1GrammarConstructor(const string &rulesPath) {
                             Symbol pp(nonTerminal, temp);
                             production.push_back(pp);
                         }
-                    }
+
 
                 }
             }
